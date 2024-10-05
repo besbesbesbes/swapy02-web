@@ -1,4 +1,4 @@
-import ShippingList from "../Components/ShippingList";
+import ShippingList from "../components/ShippingList";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAppStore from "../store/user-store";

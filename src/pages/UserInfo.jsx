@@ -1,4 +1,4 @@
-import UserInfoProfile from "../Components/UserInfoProfile";
+import UserInfoProfile from "../components/UserInfoProfile";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/user-store";

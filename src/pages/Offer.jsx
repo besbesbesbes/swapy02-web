@@ -1,7 +1,7 @@
 import React from "react";
-import OfferList from "../Components/OfferList";
-import OfferDetail from "../Components/OfferDetail";
-import OfferMessage from "../Components/OfferMessage";
+import OfferList from "../components/OfferList";
+import OfferDetail from "../components/OfferDetail";
+import OfferMessage from "../components/OfferMessage";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAppStore from "../store/user-store";

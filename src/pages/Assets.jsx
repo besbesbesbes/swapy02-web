@@ -1,5 +1,5 @@
 import React from "react";
-import AssetsList from "../Components/AssetsList";
+import AssetsList from "../components/AssetsList";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAppStore from "../store/user-store";

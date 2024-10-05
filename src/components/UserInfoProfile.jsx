@@ -17,6 +17,13 @@ const UserInfoProfile = () => {
     userAddress: "",
   });
   const [message, setMessage] = useState("");
+  const showMessage = (msg) => {
+    setMessage(msg);
+    document.getElementById("message_modal").showModal();
+    setTimeout(() => {
+      document.getElementById("message_modal").close();
+    }, 1000);
+  };
   const getUserInfo = async () => {
     try {
       const resp = await axios.get("http://localhost:8000/api/user/", {
@@ -32,7 +39,6 @@ const UserInfoProfile = () => {
   };
   const hdlChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-    // console.log(input)
   };
 
   const updateUserInfo = async (e) => {
@@ -48,8 +54,7 @@ const UserInfoProfile = () => {
         }
       );
       setUserInfo(resp.data.user);
-      setMessage(resp.data.msg);
-      document.getElementById("message_modal").showModal();
+      showMessage(resp.data.msg);
       await getUserInfo();
     } catch (err) {
       console.log(err);
@@ -170,19 +175,11 @@ const UserInfoProfile = () => {
             Update
           </button>
         </div>
-        {/* Modal contactUs */}
-        <dialog id="message_modal" className="modal">
-          <ShowMessage msg={message} />
-        </dialog>
-        {/* res message */}
-        {/* <div
-          className={`bg-black bg-opacity-80 w-full h-full fixed top-0 left-0 transition-all duration-500 ${
-            ctrlShowMsg.visibility === "visible"
-              ? "opacity-100"
-              : "opacity-0 pointer-events-none"
-          } z-10`}
-        ></div> */}
       </form>
+      {/* Modal message */}
+      <dialog id="message_modal" className="modal">
+        <ShowMessage msg={message} />
+      </dialog>
     </div>
   );
 };
