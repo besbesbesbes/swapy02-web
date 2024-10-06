@@ -20,9 +20,10 @@ export default function ShowAsset() {
   const getAssets = async () => {
     try {
       const result = await axios.get(
-        "http://localhost:8000/api/search?a=" + currentAsset
+        "http://localhost:8000/api/search/all?a=" + currentAsset
       );
       setAssets(result.data.assets[0]);
+      console.log(result.data.assets[0]);
     } catch (err) {
       console.log(err.message);
     }
@@ -134,7 +135,8 @@ export default function ShowAsset() {
       {/* button */}
       {Object.keys(user).length > 0 &&
         user.userIsReady &&
-        user.userId !== assets.userId && (
+        user.userId !== assets.userId &&
+        assets.assetStatus == "READY" && (
           <div className="flex justify-center items-center mt-2">
             <button className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover">
               <MdLocalOffer className="-translate-y-[1px]" />
@@ -142,6 +144,11 @@ export default function ShowAsset() {
             </button>
           </div>
         )}
+      {assets.assetStatus !== "READY" && (
+        <div className="flex justify-center text-xl font-bold">
+          <p className="text-my-acct">Asset has already matched</p>
+        </div>
+      )}
       {user.userId == assets.userId && (
         <div className="flex justify-center text-xl font-bold">
           <p>...This is your asset...</p>

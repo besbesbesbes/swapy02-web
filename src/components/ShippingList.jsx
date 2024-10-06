@@ -19,7 +19,7 @@ export default function ShippingList() {
   };
   const getAssets = async () => {
     const resp = await axios.get(
-      "http://localhost:8000/api/search?i=" + user.userId,
+      "http://localhost:8000/api/search/all?i=" + user.userId,
       {
         headers: {
           Authorization: `Bearer ${token}`,
