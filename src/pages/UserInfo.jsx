@@ -7,7 +7,7 @@ const UserInfo = () => {
   const navigate = useNavigate();
   const token = useUserStore((state) => state.token);
   useEffect(() => {
-    Object.keys(token).length == 0 ? navigate("/notfound") : null;
+    token == "" ? navigate("/notfound") : null;
   }, []);
 
   return (

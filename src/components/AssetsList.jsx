@@ -1,39 +1,39 @@
 import { IoIosAddCircle } from "react-icons/io";
 import { AiFillEdit } from "react-icons/ai";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-// import { data_dummy } from '../data/testData'
 import ShowAsset from "./ShowAsset";
 import { useEffect, useState } from "react";
-import useAppStore from "../store/user-store";
+import useUserStore from "../store/user-store";
+import useAssetStore from "../store/asset-store";
 import axios from "axios";
-// const assets = data_dummy.assets
 
 const AssetsList = () => {
-  const [ctrlShowAsset, setCtrlShowAsset] = useState({
-    visibility: "invisible",
-    opacity: 0,
-  });
-  const [selectedAsset, setSelectedAsset] = useState({});
+  const token = useUserStore((state) => state.token);
+  const user = useUserStore((state) => state.user);
+  const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const [assets, setAssets] = useState([]);
   const hdlShowAssets = (el) => {
-    setSelectedAsset(el);
-    setCtrlShowAsset({ visibility: "visible", opacity: 100 });
+    setCurrentAsset(el.assetId);
+    document.getElementById("asset_modal").showModal();
   };
-  const { user, token } = useAppStore((state) => ({
-    user: state.user,
-    token: state.token,
-  }));
   const getAssets = async () => {
-    const resp = await axios.get("http://localhost:8000/asset/", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setAssets(resp.data.assets);
+    try {
+      const resp = await axios.get(
+        "http://localhost:8000/api/search?i=" + user.userId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAssets(resp.data.assets);
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     getAssets();
-  }, [assets]);
+  }, []);
 
   return (
     <div>
@@ -91,7 +91,7 @@ const AssetsList = () => {
             {/* button asset */}
             <div className="w-[150px]  flex flex-col justify-evenly items-center">
               <div>
-                <p className="font-bold">Ready</p>
+                <p className="font-bold">{el.assetStatus}</p>
               </div>
               <button className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover">
                 <AiFillEdit />
@@ -105,13 +105,10 @@ const AssetsList = () => {
           </div>
         ))}
       </div>
-      {/* show asset */}
-      <ShowAsset
-        ctrlShowAsset={ctrlShowAsset}
-        setCtrlShowAsset={setCtrlShowAsset}
-        selectedAsset={selectedAsset}
-        setSelectedAsset={setSelectedAsset}
-      />
+      {/* Modal showAsset */}
+      <dialog id="asset_modal" className="modal">
+        <ShowAsset />
+      </dialog>
     </div>
   );
 };

@@ -4,7 +4,7 @@ const useUserStore = create(
   persist(
     (set) => ({
       user: {},
-      setUser: (newVal) => set((prv) => (prv.user = newVal)),
+      setUser: (newVal) => set({ user: newVal }),
       token: "",
       setToken: (newVal) => set({ token: newVal }),
     }),

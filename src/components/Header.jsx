@@ -21,37 +21,20 @@ const Header = () => {
   const setUser = useUserStore((state) => state.setUser);
   const token = useUserStore((state) => state.token);
   const setToken = useUserStore((state) => state.setToken);
-
   // -----------------------------------------------------------------------
-  // const [inputValue, setInputValue] = useState('');
-  // const [suggestions, setSuggestions] = useState([]);
-  // const [assets, setAssets] = useState([])
-  // const getAssets = async () => {
-  //     const resp = await axios.get("http://localhost:8000/search/all")
-  //     setAssets(resp.data.assets)
-  // }
-  // useEffect(() => {
-  //     getAssets()
-  // }, [])
-  // const handleChange = async (e) => {
-  //     const value = e.target.value;
-  //     const predefinedSuggestions = assets.map(el => el.assetName)
-  //     setInputValue(value);
-  //     if (value) {
-  //         const filteredSuggestions = predefinedSuggestions.filter(item =>
-  //             item.toLowerCase().includes(value.toLowerCase())
-  //         );
-  //         setSuggestions(filteredSuggestions);
-  //     } else {
-  //         setSuggestions([]);
-  //     }
-  // };
-
-  // const handleSuggestionClick = (suggestion) => {
-  //     setInputValue(suggestion);
-  //     setSuggestions([]);
-  // };
-
+  const [suggestions, setSuggestions] = useState([]);
+  const [assets, setAssets] = useState([]);
+  const getAssets = async () => {
+    try {
+      const resp = await axios.get("http://localhost:8000/api/search");
+      setAssets(resp.data.assets);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getAssets();
+  }, []);
   // -----------------------------------------------------------------------
   const hdlLogout = () => {
     setToken("");
@@ -59,11 +42,26 @@ const Header = () => {
     navigate("/");
   };
   const hdlChangeInput = (e) => {
-    setInput(e.target.value);
-    console.log(input);
+    const value = e.target.value;
+    setInput(value);
+    const predefinedSuggestions = assets.map((el) => el.assetName);
+    if (value) {
+      const filteredSuggestions = predefinedSuggestions.filter((item) =>
+        item.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+  const handleSuggestionClick = (suggestion) => {
+    setSuggestions([]);
+    navigate("/search?v=" + suggestion);
+    setInput("");
   };
   const hdlSubmitSearch = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    setSuggestions([]);
     navigate("/search?v=" + input);
     setInput("");
   };
@@ -141,23 +139,20 @@ const Header = () => {
               value={input}
               onChange={hdlChangeInput}
             />
-            {/* value={inputValue}
-                            onChange={handleChange} /> */}
             {/* -------------------------------------------------------------------------- */}
-            {/* {suggestions.length > 0 && (
-                            <ul className="absolute bg-white border mt-[1px] w-full left-0 max-h-60 overflow-auto z-10 text-my-prim translate-y-8">
-                                {suggestions.map((suggestion, index) => (
-                                    <li
-                                        key={index}
-                                        onClick={() => handleSuggestionClick(suggestion)}
-                                        className="p-2 cursor-pointer hover:bg-gray-200"
-                                    >
-                                        {suggestion}
-                                    </li>
-                                ))}
-                            </ul>
-                        )} */}
-
+            {suggestions.length > 0 && (
+              <ul className="absolute bg-white border mt-[1px] w-full left-0 max-h-60 overflow-auto z-10 text-my-prim translate-y-8">
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="p-2 cursor-pointer hover:bg-gray-200"
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
             {/* -------------------------------------------------------------------------- */}
             <button className="btn h-[30px] min-h-[30px] text-my-text border-none rounded-none py-1 px-2 bg-my-acct flex justify-center items-center gap-1 hover:bg-my-btn-hover">
               {" "}

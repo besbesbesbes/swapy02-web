@@ -30,10 +30,11 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
         name: input.inputUser,
         password: input.inputPass,
       });
+      console.log(resp);
       if (resp.data.token) {
         setToken(resp.data.token);
         setUser(resp.data.user);
-        setInput((prv) => ({
+        setInput(() => ({
           inputUser: "",
           inputPass: "",
           inputNewUser: "",

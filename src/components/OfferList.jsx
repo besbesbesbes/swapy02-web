@@ -1,21 +1,61 @@
-import React from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import useUserStore from "../store/user-store";
+import useOfferStore from "../store/offer-store";
 
 export default function OfferList() {
-    return (
-        <div className='bg-my-bg-card w-2/12 shadow-md h-auto p-2 gap-4 flex flex-col items-start'>
-            <p className='p-1 font-bold bg-my-prim text-my-text w-full text-center'>Your offer list</p>
-            {/* offer list */}
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-            <button className='p-1 text-my-text w-full hover:bg-my-btn-hover font-bold bg-my-acct text-left'>Offer #1234 from Joh***3</button>
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-            <button className='p-1 hover:bg-my-hover'>Offer #1234 from Joh***3</button>
-
-
-
-        </div>
-    )
+  const token = useUserStore((state) => state.token);
+  const currentOffer = useOfferStore((state) => state.currentOffer);
+  const setCurrentOffer = useOfferStore((state) => state.setCurrentOffer);
+  const [offers, setOffers] = useState([]);
+  const getOffers = async () => {
+    try {
+      const resp = await axios.get("http://localhost:8000/api/offer/getList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setOffers(resp.data.offers);
+      if (!resp.data.offers[0]) {
+        return;
+      }
+      setCurrentOffer(resp.data.offers[0].offerId);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getOffers();
+  }, []);
+  return (
+    <div className="bg-my-bg-card w-3/12 shadow-md h-auto p-2 gap-4 flex flex-col items-start">
+      {/* <button onClick={() => console.log(currentOffer)}>Test</button> */}
+      <p className="p-1 font-bold bg-my-prim text-my-text w-full text-center">
+        Your offer list
+      </p>
+      {/* offer list */}
+      {offers.map((el, idx) => (
+        <button
+          key={idx}
+          className={`p-1  w-full text-left ${
+            currentOffer == el.offerId
+              ? "bg-my-bg-card font-bold text-my-prim hover:bg-my-hover border border-my-acct"
+              : "hover:bg-my-hover"
+          }`}
+          onClick={() => setCurrentOffer(el.offerId)}
+        >
+          <div className="flex justify-between">
+            <p className="">{el.offerName}</p>
+            <p
+              className={`${
+                el.offerStatus == "CREATED" ? "text-my-acct" : "text-my-prim"
+              }`}
+            >
+              {el.offerStatus}
+            </p>
+          </div>
+        </button>
+      ))}
+    </div>
+  );
 }
