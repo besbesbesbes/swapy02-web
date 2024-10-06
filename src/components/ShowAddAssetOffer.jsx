@@ -52,7 +52,7 @@ export default function ShowAddAssetOffer() {
     e.stopPropagation();
     try {
       const resp = await axios.post(
-        "http://localhost:8000/api/offer/asset/" +
+        "http://localhost:8000/api/offer/asset/add/" +
           currentOffer +
           "/" +
           el.assetId,
@@ -64,7 +64,7 @@ export default function ShowAddAssetOffer() {
         }
       );
       console.log(resp.data);
-      //   addMessage
+      // addMessage
       const body = {
         messageTxt: `Add [${resp.data.newOfferAsset.asset.assetName}] on ${
           resp.data.newOfferAsset.asset.userId ==

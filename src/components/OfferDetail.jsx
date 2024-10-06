@@ -10,9 +10,11 @@ import ShowAddAssetOffer from "./ShowAddAssetOffer";
 
 export default function OfferDetail() {
   const token = useUserStore((state) => state.token);
+  const user = useUserStore((state) => state.user);
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const currentOffer = useOfferStore((state) => state.currentOffer);
   const setAddAssetUserId = useOfferStore((state) => state.setAddAssetUserId);
+  const setCurrentOffer = useOfferStore((state) => state.setCurrentOffer);
   const [offer, setOffer] = useState({});
   const hdlShowAssets = (el) => {
     setCurrentAsset(el.assetId);
@@ -47,6 +49,46 @@ export default function OfferDetail() {
       getOfferDetail();
     }
   }, [currentOffer]);
+  const helDelOfferAsset = async (e, el) => {
+    e.stopPropagation();
+    try {
+      const resp = await axios.post(
+        "http://localhost:8000/api/offer/asset/del/" +
+          currentOffer +
+          "/" +
+          el.assetId,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(resp.data);
+      // addMessage
+      const body = {
+        messageTxt: `Remove [${resp.data.delOfferAsset.asset.assetName}] on ${
+          resp.data.delOfferAsset.asset.userId ==
+          resp.data.delOfferAsset.offer.offerorId
+            ? "Offeror"
+            : "Swaper"
+        } side`,
+        messageIsAuto: "true",
+        userId: user.userId,
+        offerId: currentOffer,
+      };
+      await axios.post("http://localhost:8000/api/msg", body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      //refeash
+      setCurrentOffer(null);
+      setTimeout(() => setCurrentOffer(currentOffer), 0);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="bg-my-bg-card w-full shadow-md p-2">
@@ -170,7 +212,10 @@ export default function OfferDetail() {
                         <p>{el?.asset?.assetCategory}</p>
                         <p>{el?.asset?.assetCondition}</p>
                       </div>
-                      <div className="bg-my-prim mr-4 p-2 rounded-full my-auto flex justify-center items-center">
+                      <div
+                        className="bg-my-prim mr-4 p-2 rounded-full my-auto flex justify-center items-center hover:bg-my-prim-hover"
+                        onClick={(e) => helDelOfferAsset(e, el)}
+                      >
                         <IoTrashBin className="text-my-text text-lg" />
                       </div>
                     </div>
@@ -216,7 +261,10 @@ export default function OfferDetail() {
                         <p>{el?.asset?.assetCategory}</p>
                         <p>{el?.asset?.assetCondition}</p>
                       </div>
-                      <div className="bg-my-acct mr-4 p-2 rounded-full my-auto flex justify-center items-center">
+                      <div
+                        className="bg-my-acct mr-4 p-2 rounded-full my-auto flex justify-center items-center hover:bg-my-btn-hover"
+                        onClick={(e) => helDelOfferAsset(e, el)}
+                      >
                         <IoTrashBin className="text-my-text text-lg" />
                       </div>
                     </div>

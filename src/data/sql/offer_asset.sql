@@ -1,4 +1,4 @@
-INSERT INTO `Offer_asset` (`offer_asset_id`,`created_at`,`updated_at`,`offer_id`,`asset_id`) 
+INSERT IGNORE INTO `Offer_asset` (`offer_asset_id`,`created_at`,`updated_at`,`offer_id`,`asset_id`) 
 VALUES 
 	(1,'2024-09-20 06:26:10.370000','2024-09-20 06:26:10.370000',1,19),
 	(2,'2024-09-20 06:26:10.370000','2024-09-20 06:26:10.370000',1,73),
