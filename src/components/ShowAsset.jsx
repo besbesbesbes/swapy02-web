@@ -4,13 +4,17 @@ import { MdLocalOffer } from "react-icons/md";
 import axios from "axios";
 import useUserStore from "../store/user-store";
 import useAssetStore from "../store/asset-store";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function ShowAsset() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const currentAsset = useAssetStore((state) => state.currentAsset);
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const [selectedPic, setSelectedPic] = useState(0);
   const [assets, setAssets] = useState([]);
   const user = useUserStore((state) => state.user);
+  const token = useUserStore((state) => state.token);
   const hdlClosePopup = (e) => {
     setAssets([]);
     setSelectedPic(0);
@@ -24,6 +28,40 @@ export default function ShowAsset() {
       );
       setAssets(result.data.assets[0]);
       console.log(result.data.assets[0]);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+  const hdlCreateOffer = async () => {
+    try {
+      const result = await axios.post(
+        "http://localhost:8000/api/offer/createOffer/" + currentAsset,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // addMessage
+      const body = {
+        messageTxt: `Offeror create new offer with [${result.data.returnOffer.offerAssets[0].asset.assetName}]`,
+        messageIsAuto: "true",
+        userId: user.userId,
+        offerId: result.data.returnOffer.offerId,
+      };
+      await axios.post("http://localhost:8000/api/msg", body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      //navigate
+      if (location.pathname == "/offer") {
+        navigate(0);
+      } else {
+        navigate("/offer");
+      }
+      console.log(result.data);
     } catch (err) {
       console.log(err.message);
     }
@@ -138,7 +176,10 @@ export default function ShowAsset() {
         user.userId !== assets.userId &&
         assets.assetStatus == "READY" && (
           <div className="flex justify-center items-center mt-2">
-            <button className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover">
+            <button
+              className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover"
+              onClick={hdlCreateOffer}
+            >
               <MdLocalOffer className="-translate-y-[1px]" />
               Make New Offer
             </button>

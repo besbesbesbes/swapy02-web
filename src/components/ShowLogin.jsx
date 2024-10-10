@@ -42,6 +42,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
           inputNewPass: "",
           inputNewPassConfirm: "",
         }));
+        setLoginErr(false);
         e.target.closest("dialog").close();
       }
     } catch (err) {

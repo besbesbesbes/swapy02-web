@@ -5,6 +5,8 @@ const useOfferStore = create((set) => ({
   setCurrentOffer: (newVal) => set({ currentOffer: newVal }),
   addAssetUserId: 0,
   setAddAssetUserId: (newVal) => set({ addAssetUserId: newVal }),
+  noOffer: 0,
+  setNoOffer: (newVal) => set({ noOffer: newVal }),
 }));
 
 export default useOfferStore;

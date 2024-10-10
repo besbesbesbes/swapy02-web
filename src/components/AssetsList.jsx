@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import useUserStore from "../store/user-store";
 import useAssetStore from "../store/asset-store";
 import axios from "axios";
+import { FaBoxOpen } from "react-icons/fa";
 
 const AssetsList = () => {
   const token = useUserStore((state) => state.token);
@@ -26,6 +27,7 @@ const AssetsList = () => {
           },
         }
       );
+      console.log(resp.data);
       setAssets(resp.data.assets);
     } catch (err) {
       console.log(err);
@@ -44,6 +46,17 @@ const AssetsList = () => {
           Create New Asset
         </button>
       </div>
+      {assets.length == 0 && (
+        <div className="mt-[100px] flex flex-col items-center">
+          <FaBoxOpen className="text-my-acct text-[100px]" />
+          <p className="text-2xl text-my-acct font-bold">
+            You have no asset yet.
+          </p>
+          <p className="text-2xl text-my-acct font-bold">
+            Try to create by click button above.
+          </p>
+        </div>
+      )}
       <div className="w-8/12 mx-auto p-2 mt-2 flex flex-col gap-4 bg-my-bg-card">
         {assets.map((el, idx) => (
           // asset list area
