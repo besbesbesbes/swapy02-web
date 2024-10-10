@@ -91,13 +91,13 @@ export default function ShowAsset() {
             />
           </div>
           {/* list pic */}
-          <div className="w-full h-1/6 py-2 flex gap-2 overflow-auto">
+          <div className="w-full h-[95px] py-2 flex gap-2 overflow-x-auto">
             {assets?.assetPics?.map((el, idx) => (
               <img
                 key={idx}
                 src={el.assetPic}
                 alt="no load"
-                className={`w-[50px] h-[50px] object-contain border cursor-pointer hover:bg-my-hover ${
+                className={`w-[50px] h-[50px] border cursor-pointer hover:bg-my-hover object-contain ${
                   selectedPic == idx ? "border-my-acct border-2" : ""
                 }`}
                 onClick={(e) => {
@@ -144,7 +144,12 @@ export default function ShowAsset() {
                         ></div>
                       ))}
                   </div>
-                  <p className="text-xs">{`(${assets?.user?.userRating}/ ${assets?.user?.userRatingCount})`}</p>
+                  <p className="text-xs">{`( ${
+                    assets?.user?.userRating != null &&
+                    !isNaN(assets?.user?.userRating)
+                      ? Number(assets?.user?.userRating).toFixed(2)
+                      : "0.00"
+                  } / ${assets?.user?.userRatingCount || 0} )`}</p>
                 </div>
               </div>
             </div>

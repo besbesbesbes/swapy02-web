@@ -39,6 +39,7 @@ const Header = () => {
   const hdlLogout = () => {
     setToken("");
     setUser({});
+    localStorage.clear();
     navigate("/");
   };
   const hdlChangeInput = (e) => {
@@ -122,7 +123,7 @@ const Header = () => {
                 }
               >
                 <FaArrowAltCircleRight className="translate-y-[2px]" />
-                Login
+                Login / Register
               </button>
             )}
           </div>

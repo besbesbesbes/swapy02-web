@@ -1,13 +1,17 @@
 import { IoIosSave } from "react-icons/io";
 import useUserStore from "../store/user-store";
+import useOtherStore from "../store/other-store";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import ShowMessage from "./ShowMessage";
+import ShowChangePassword from "./ShowChangePassword";
+import ShowChangeProfile from "./ShowChangeProfile";
 
 const UserInfoProfile = () => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const token = useUserStore((state) => state.token);
+  const setMessage = useOtherStore((state) => state.setMessage);
   const [userInfo, setUserInfo] = useState({});
   const [input, setInput] = useState({
     userProfilePic: "",
@@ -16,13 +20,8 @@ const UserInfoProfile = () => {
     userLocation: "",
     userAddress: "",
   });
-  const [message, setMessage] = useState("");
-  const showMessage = (msg) => {
-    setMessage(msg);
-    document.getElementById("message_modal").showModal();
-    setTimeout(() => {
-      document.getElementById("message_modal").close();
-    }, 1000);
+  const showChangeProfile = () => {
+    document.getElementById("change_profile_modal").showModal();
   };
   const getUserInfo = async () => {
     try {
@@ -54,11 +53,19 @@ const UserInfoProfile = () => {
         }
       );
       setUserInfo(resp.data.user);
-      showMessage(resp.data.msg);
+      setMessage(resp.data.msg);
+      document.getElementById("message_modal").showModal();
+      setTimeout(() => {
+        document.getElementById("message_modal").close();
+      }, 1000);
       await getUserInfo();
     } catch (err) {
-      console.log(err);
-      // await getUserInfo();
+      setMessage(err.response.data.msg || err.message);
+      document.getElementById("message_modal").showModal();
+      setTimeout(() => {
+        setMessage("");
+        document.getElementById("message_modal").close();
+      }, 1000);
     }
   };
   useEffect(() => {
@@ -80,22 +87,25 @@ const UserInfoProfile = () => {
       <div className="w-5/12 h-[150px]  mx-auto flex gap-4">
         {/* <button onClick={() => console.log(user)}>Test</button> */}
         {/* profile pic */}
-        <div className="w-[150px] h-[150px] flex justify-center relative">
+        <div
+          className="w-[150px] h-[150px] flex justify-center relative cursor-pointer"
+          onClick={showChangeProfile}
+        >
           <img
-            className=" object-cover w-full h-full shadow-xl"
+            className=" object-cover w-full h-full shadow-md"
             src={input.userProfilePic}
             alt="no load"
           />
-          <p className="absolute bottom-0 text-slate-500 translate-y-4 text-[.6rem]">
-            CLICK TO UPLOAD
+          <p className="absolute bottom-0 text-slate-500 translate-y-5 text-[.6rem]">
+            CLICK TO CHANGE
           </p>
         </div>
         {/* user info */}
         <div className="flex-1 h-full  flex flex-col justify-between">
-          <div>
+          <div className="flex flex-col gap-1">
             <div className="w-full flex  gap-2">
               <p className="w-4/12 font-bold">Username :</p>
-              <p className="flex-1">{userInfo.userName}</p>
+              <p className="flex-1 font-bold">{userInfo.userName}</p>
             </div>
             <div className="w-full flex  gap-2">
               <p className="w-4/12 font-bold">Display Name :</p>
@@ -108,9 +118,20 @@ const UserInfoProfile = () => {
             </div>
             <div className="w-full flex  gap-2">
               <p className="w-4/12 font-bold">Status :</p>
-              <p className="flex-1">
+              <p className="flex-1 font-bold">
                 {userInfo.userIsReady ? "Ready" : "Not Ready"}
               </p>
+            </div>
+            <div className="w-full flex  gap-2">
+              <p className="w-4/12 font-bold">Password</p>
+              <button
+                className="flex-1 cursor-pointer text-my-acct font-bold text-left"
+                onClick={() =>
+                  document.getElementById("change_password_modal").showModal()
+                }
+              >
+                Change Password
+              </button>
             </div>
           </div>
           {/* user rating */}
@@ -126,7 +147,11 @@ const UserInfoProfile = () => {
                 )
               )}
               {userInfo.userRating ? (
-                <p className="text-xs">{`(${userInfo.userRating} , ${userInfo.userRatingCount})`}</p>
+                <p className="text-xs">{`( ${
+                  userInfo?.userRating != null && !isNaN(userInfo.userRating)
+                    ? Number(userInfo.userRating).toFixed(2)
+                    : "0.00"
+                } / ${userInfo?.userRatingCount || 0} )`}</p>
               ) : (
                 <p>User not have rating yet.</p>
               )}
@@ -166,7 +191,7 @@ const UserInfoProfile = () => {
           ></textarea>
         </div>
         {/* update button */}
-        <div className="w-full flex justify-center py-8">
+        <div className="w-full flex justify-center py-8 gap-2">
           <button
             className="h-[40px] py-1 w-[200px] bg-my-acct font-bold text-white flex justify-center items-center gap-1 shadow-md hover:bg-my-btn-hover"
             onClick={updateUserInfo}
@@ -176,10 +201,19 @@ const UserInfoProfile = () => {
           </button>
         </div>
       </form>
+      {/* Modal Change Password */}
+      <dialog id="change_password_modal" className="modal">
+        <ShowChangePassword />
+      </dialog>
       {/* Modal message */}
       <dialog id="message_modal" className="modal">
-        <ShowMessage msg={message} />
+        <ShowMessage />
       </dialog>
+      {/* Modal change profile */}
+      <dialog id="change_profile_modal" className="modal">
+        <ShowChangeProfile />
+      </dialog>
+      {/* <button onClick={() => console.log(message)}>Test</button> */}
     </div>
   );
 };
