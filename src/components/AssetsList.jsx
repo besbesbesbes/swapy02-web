@@ -7,12 +7,18 @@ import useUserStore from "../store/user-store";
 import useAssetStore from "../store/asset-store";
 import axios from "axios";
 import { FaBoxOpen } from "react-icons/fa";
+import ShowCreateAsset from "./ShowCreateAsset";
+import { MdLocalOffer } from "react-icons/md";
+import ShowMessage from "./ShowMessage";
+import useOtherStore from "../store/other-store";
 
 const AssetsList = () => {
   const token = useUserStore((state) => state.token);
   const user = useUserStore((state) => state.user);
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const [assets, setAssets] = useState([]);
+  const setMessage = useOtherStore((state) => state.setMessage);
+  const message = useOtherStore((state) => state.message);
   const hdlShowAssets = (el) => {
     setCurrentAsset(el.assetId);
     document.getElementById("asset_modal").showModal();
@@ -34,14 +40,46 @@ const AssetsList = () => {
     }
   };
   useEffect(() => {
-    getAssets();
+    if (assets) {
+      getAssets();
+    }
   }, []);
-
+  const hdlCreateAsset = () => {
+    document.getElementById("create_asset_modal").showModal();
+  };
+  const hdlReady = async (e, el) => {
+    e.stopPropagation();
+    console.log("http://localhost:8000/api/asset/assetReady/" + el.assetId);
+    try {
+      const resp = await axios.post(
+        "http://localhost:8000/api/asset/assetReady/" + el.assetId,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setMessage(resp.data.msg);
+      document.getElementById("message_modal").showModal();
+      setTimeout(() => {
+        document.getElementById("message_modal").close();
+        setMessage("resp.data.msg");
+      }, 1000);
+      console.log(resp.data);
+      getAssets();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div>
       {/* create new asset button */}
       <div className="w-full flex justify-center">
-        <button className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover">
+        <button
+          className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover"
+          onClick={hdlCreateAsset}
+        >
           <IoIosAddCircle className="text-xl" />
           Create New Asset
         </button>
@@ -57,12 +95,12 @@ const AssetsList = () => {
           </p>
         </div>
       )}
-      <div className="w-8/12 mx-auto p-2 mt-2 flex flex-col gap-4 bg-my-bg-card">
+      <div className="w-8/12 mx-auto p-2 mt-2 flex flex-col gap-8 bg-my-bg-card">
         {assets.map((el, idx) => (
           // asset list area
           <div
             key={idx}
-            className="w-full h-auto shadow-md flex gap-4 p-2 hover:bg-my-hover cursor-pointer"
+            className="w-full h-auto shadow-md flex gap- p-2 hover:bg-my-hover cursor-pointer relative"
             onClick={() => hdlShowAssets(el)}
           >
             <div className="w-[100px] ">
@@ -103,9 +141,15 @@ const AssetsList = () => {
             </div>
             {/* button asset */}
             <div className="w-[150px]  flex flex-col justify-evenly items-center">
-              <div>
-                <p className="font-bold">{el.assetStatus}</p>
-              </div>
+              {el.assetStatus == "CREATED" && (
+                <button
+                  className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover"
+                  onClick={(e) => hdlReady(e, el)}
+                >
+                  <MdLocalOffer />
+                  Ready for Offer
+                </button>
+              )}
               <button className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover">
                 <AiFillEdit />
                 Edit
@@ -115,12 +159,24 @@ const AssetsList = () => {
                 Delete
               </button>
             </div>
+            {/* badge status */}
+            <div className="px-2 mp-1 bg-my-acct absolute font-bold text-my-text rounded-xl top-0 left-0 -translate-x-3 -translate-y-3">
+              <p>{el.assetStatus}</p>
+            </div>
           </div>
         ))}
       </div>
+      {/* Modal Create Asset */}
+      <dialog id="create_asset_modal" className="modal">
+        <ShowCreateAsset />
+      </dialog>
       {/* Modal showAsset */}
       <dialog id="asset_modal" className="modal">
         <ShowAsset />
+      </dialog>
+      {/* Modal message */}
+      <dialog id="message_modal" className="modal">
+        <ShowMessage />
       </dialog>
     </div>
   );

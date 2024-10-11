@@ -26,8 +26,8 @@ export default function ShowAsset() {
       const result = await axios.get(
         "http://localhost:8000/api/search/all?a=" + currentAsset
       );
-      setAssets(result.data.assets[0]);
       console.log(result.data.assets[0]);
+      setAssets(result.data.assets[0]);
     } catch (err) {
       console.log(err.message);
     }
@@ -155,10 +155,14 @@ export default function ShowAsset() {
             </div>
           </div>
           {/* asset detail */}
-          <div className=" w-full h-[400px] p-2 flex flex-col gap-4">
+          <div className=" w-full h-[400px] p-2 flex flex-col gap-1">
             <div className=" flex">
               <p className="min-w-3/12 font-bold">Asset :</p>
               <p className="flex-1">{assets.assetName}</p>
+            </div>
+            <div className=" flex">
+              <p className="min-w-3/12 font-bold">Brand :</p>
+              <p className="flex-1">{assets.assetBrand || "n/a"}</p>
             </div>
             <div className=" flex">
               <p className="min-w-3/12 font-bold">Category :</p>
@@ -190,7 +194,7 @@ export default function ShowAsset() {
             </button>
           </div>
         )}
-      {assets.assetStatus !== "READY" && (
+      {assets.assetStatus !== "READY" && assets.assetStatus !== "CREATED" && (
         <div className="flex justify-center text-xl font-bold">
           <p className="text-my-acct">Asset has already matched</p>
         </div>
