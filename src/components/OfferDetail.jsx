@@ -161,7 +161,12 @@ export default function OfferDetail() {
                           className="w-[10px] h-[10px] rounded-full bg-my-acct"
                         ></div>
                       ))}
-                    <p className="text-xs">{`(${offer?.swaper?.userRating} / ${offer?.swaper?.userRatingCount})`}</p>
+                    <p className="text-xs">{`( ${
+                      offer?.swaper?.userRating != null &&
+                      !isNaN(offer?.swaper?.userRating)
+                        ? Number(offer?.swaper?.userRating).toFixed(2)
+                        : "0.00"
+                    } / ${offer?.swaper?.userRatingCount || 0} )`}</p>
                   </div>
                 </div>
               </div>
@@ -198,7 +203,12 @@ export default function OfferDetail() {
                           className="w-[10px] h-[10px] rounded-full bg-my-acct"
                         ></div>
                       ))}
-                    <p className="text-xs">{`(${offer?.offeror?.userRating} / ${offer?.offeror?.userRatingCount})`}</p>
+                    <p className="text-xs">{`( ${
+                      offer?.offeror?.userRating != null &&
+                      !isNaN(offer?.offeror?.userRating)
+                        ? Number(offer?.offeror?.userRating).toFixed(2)
+                        : "0.00"
+                    } / ${offer?.offeror?.userRatingCount || 0} )`}</p>
                   </div>
                 </div>
               </div>

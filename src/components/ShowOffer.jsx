@@ -6,6 +6,8 @@ import useUserStore from "../store/user-store";
 import ShowAsset from "./ShowAsset";
 import useAssetStore from "../store/asset-store";
 import { useNavigate } from "react-router-dom";
+import ShowMessage from "./ShowMessage";
+import useOtherStore from "../store/other-store";
 
 export default function ShowOffer() {
   const navigate = useNavigate();
@@ -14,6 +16,8 @@ export default function ShowOffer() {
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const currentOffer = useOfferStore((state) => state.currentOffer);
   const setCurrentOffer = useOfferStore((state) => state.setCurrentOffer);
+  const message = useOtherStore((state) => state.message);
+  const setMessage = useOtherStore((state) => state.setMessage);
   const [offer, setOffer] = useState({});
   const hdlClosePopup = (e) => {
     setCurrentOffer(0);
@@ -76,6 +80,12 @@ export default function ShowOffer() {
       navigate(0);
     } catch (err) {
       console.log(err.message);
+      setMessage(err.response.data.msg || err.message);
+      document.getElementById("message_modal").showModal();
+      setTimeout(() => {
+        setMessage("");
+        document.getElementById("message_modal").close();
+      }, 1000);
     }
   };
   return (
@@ -138,7 +148,13 @@ export default function ShowOffer() {
                           className="w-[10px] h-[10px] rounded-full bg-my-acct"
                         ></div>
                       ))}
-                    <p className="text-xs">{`(${offer?.swaper?.userRating} / ${offer?.swaper?.userRatingCount})`}</p>
+
+                    <p className="text-xs">{`( ${
+                      offer?.swaper?.userRating != null &&
+                      !isNaN(offer?.swaper?.userRating)
+                        ? Number(offer?.swaper?.userRating).toFixed(2)
+                        : "0.00"
+                    } / ${offer?.swaper?.userRatingCount || 0} )`}</p>
                   </div>
                 </div>
               </div>
@@ -175,7 +191,12 @@ export default function ShowOffer() {
                           className="w-[10px] h-[10px] rounded-full bg-my-acct"
                         ></div>
                       ))}
-                    <p className="text-xs">{`(${offer?.offeror?.userRating} / ${offer?.offeror?.userRatingCount})`}</p>
+                    <p className="text-xs">{`( ${
+                      offer?.offeror?.userRating != null &&
+                      !isNaN(offer?.offeror?.userRating)
+                        ? Number(offer?.offeror?.userRating).toFixed(2)
+                        : "0.00"
+                    } / ${offer?.offeror?.userRatingCount || 0} )`}</p>
                   </div>
                 </div>
               </div>
@@ -268,6 +289,10 @@ export default function ShowOffer() {
             </button>
           </div>
         )}
+        {/* message modal */}
+        <dialog id="message_modal" className="modal">
+          <ShowMessage />
+        </dialog>
         {/* close button */}
         <button
           className="w-[50px] h-[50px] bg-my-acct text-my-text rounded-full text-4xl font-bold absolute flex justify-center items-center top-0 right-0 translate-x-4 -translate-y-4 shadow-md hover:bg-my-btn-hover"

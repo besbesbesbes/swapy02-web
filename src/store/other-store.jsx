@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-const userOtherStore = create((set) => ({
+const useOtherStore = create((set) => ({
   message: "",
   setMessage: (newVal) => set({ message: newVal }),
 }));
 
-export default userOtherStore;
+export default useOtherStore;

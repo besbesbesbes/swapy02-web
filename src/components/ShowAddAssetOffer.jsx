@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import useUserStore from "../store/user-store";
 import ShowAsset from "./ShowAsset";
+import { FaBoxOpen } from "react-icons/fa";
 
 export default function ShowAddAssetOffer() {
   const token = useUserStore((state) => state.token);
@@ -95,7 +96,15 @@ export default function ShowAddAssetOffer() {
   return (
     <div className="w-4/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
       <div className="w-full  h-[450px] overflow-auto flex flex-col gap-4">
-        {assets[0] &&
+        {assets.length == 0 ? (
+          <div className="mt-[100px] flex flex-col items-center">
+            <FaBoxOpen className="text-my-acct text-[100px]" />
+            <p className="text-2xl text-my-acct font-bold">
+              This user have no asset to swap.
+            </p>
+          </div>
+        ) : (
+          assets[0] &&
           assets.map((el, idx) => (
             <div
               key={idx}
@@ -123,7 +132,8 @@ export default function ShowAddAssetOffer() {
                 <IoMdAdd className="text-my-text text-lg" />
               </button>
             </div>
-          ))}
+          ))
+        )}
         {/* Modal showAsset */}
         <dialog id="asset_modal" className="modal">
           <ShowAsset />

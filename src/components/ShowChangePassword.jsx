@@ -3,9 +3,11 @@ import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import useUserStore from "../store/user-store";
 import ShowMessage from "./ShowMessage";
+import userOtherStore from "../store/other-store";
 export default function ShowChangePassword() {
   const token = useUserStore((state) => state.token);
-  const [message, setMessage] = useState("");
+  const message = userOtherStore((state) => state.message);
+  const setMessage = userOtherStore((state) => state.setMessage);
   const [input, setInput] = useState({
     curPwd: "",
     newPwd: "",
@@ -97,7 +99,7 @@ export default function ShowChangePassword() {
       </button>
       {/* Modal Message */}
       <dialog id="message_modal" className="modal">
-        <ShowMessage msg={message} />
+        <ShowMessage />
       </dialog>
     </div>
   );
