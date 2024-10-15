@@ -11,6 +11,8 @@ import ShowCreateAsset from "./ShowCreateAsset";
 import { MdLocalOffer } from "react-icons/md";
 import ShowMessage from "./ShowMessage";
 import useOtherStore from "../store/other-store";
+import ShowEditAsset from "./ShowEditAsset";
+import ShowDeleteAsset from "./ShowDeleteAsset";
 
 const AssetsList = () => {
   const token = useUserStore((state) => state.token);
@@ -23,6 +25,7 @@ const AssetsList = () => {
     setCurrentAsset(el.assetId);
     document.getElementById("asset_modal").showModal();
   };
+  const [isCreateAssetOpen, setIsCreateAssetOpen] = useState(false);
   const getAssets = async () => {
     try {
       const resp = await axios.get(
@@ -45,6 +48,7 @@ const AssetsList = () => {
     }
   }, []);
   const hdlCreateAsset = () => {
+    setIsCreateAssetOpen(true);
     document.getElementById("create_asset_modal").showModal();
   };
   const hdlReady = async (e, el) => {
@@ -71,6 +75,16 @@ const AssetsList = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+  const hdlEditAsset = (e, el) => {
+    e.stopPropagation();
+    setCurrentAsset(el.assetId);
+    document.getElementById("edit_asset_modal").showModal();
+  };
+  const hdlDeleteAsset = (e, el) => {
+    e.stopPropagation();
+    setCurrentAsset(el.assetId);
+    document.getElementById("delete_asset_modal").showModal();
   };
   return (
     <div>
@@ -140,7 +154,7 @@ const AssetsList = () => {
               </div>
             </div>
             {/* button asset */}
-            <div className="w-[150px]  flex flex-col justify-evenly items-center">
+            <div className="w-[150px]  flex flex-col justify-start items-center gap-2">
               {el.assetStatus == "CREATED" && (
                 <button
                   className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover"
@@ -150,11 +164,19 @@ const AssetsList = () => {
                   Ready for Offer
                 </button>
               )}
-              <button className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover">
-                <AiFillEdit />
-                Edit
-              </button>
-              <button className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover">
+              {(el.assetStatus == "CREATED" || el.assetStatus == "READY") && (
+                <button
+                  className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover"
+                  onClick={(e) => hdlEditAsset(e, el)}
+                >
+                  <AiFillEdit />
+                  Edit
+                </button>
+              )}
+              <button
+                className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover"
+                onClick={(e) => hdlDeleteAsset(e, el)}
+              >
                 <RiDeleteBin5Fill />
                 Delete
               </button>
@@ -169,6 +191,14 @@ const AssetsList = () => {
       {/* Modal Create Asset */}
       <dialog id="create_asset_modal" className="modal">
         <ShowCreateAsset />
+      </dialog>
+      {/* Modal Edit Asset */}
+      <dialog id="edit_asset_modal" className="modal">
+        <ShowEditAsset />
+      </dialog>
+      {/* Modal Delete Asset */}
+      <dialog id="delete_asset_modal" className="modal">
+        <ShowDeleteAsset />
       </dialog>
       {/* Modal showAsset */}
       <dialog id="asset_modal" className="modal">

@@ -10,6 +10,8 @@ const useAssetStore = create((set) => ({
     set({
       currentAssetForRate: newVal,
     }),
+  files: [],
+  setFiles: (newVal) => set({ files: newVal }),
 }));
 
 export default useAssetStore;

@@ -11,7 +11,7 @@ import { IoTrashBin } from "react-icons/io5";
 import { FaImage } from "react-icons/fa";
 import useAssetStore from "../store/asset-store";
 
-export default function ShowCreateAsset() {
+export default function ShowEditAsset() {
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
   const token = useUserStore((state) => state.token);
@@ -21,6 +21,9 @@ export default function ShowCreateAsset() {
   const setMessage = useOtherStore((state) => state.setMessage);
   const files = useAssetStore((state) => state.files);
   const setFiles = useAssetStore((state) => state.setFiles);
+  const currentAsset = useAssetStore((state) => state.currentAsset);
+  const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
+  const [asset, setAsset] = useState({});
   const [input, setInput] = useState({
     assetName: "",
     assetBrand: "",
@@ -28,6 +31,7 @@ export default function ShowCreateAsset() {
     assetCondition: "",
     assetNote: "",
   });
+  const [picToDelete, setPicToDelete] = useState([]);
   const getUser = async () => {
     try {
       const resp = await axios.get("http://localhost:8000/api/user/", {
@@ -40,15 +44,48 @@ export default function ShowCreateAsset() {
       console.log(err);
     }
   };
+  const getAsset = async () => {
+    try {
+      const resp = await axios.get(
+        "http://localhost:8000/api/search/all?a=" + currentAsset
+      );
+      setAsset(resp.data.assets[0]);
+      console.log(resp.data);
+      setInput({
+        assetName: resp.data?.assets[0]?.assetName || "",
+        assetBrand: resp.data?.assets[0]?.assetBrand || "",
+        assetCategory: resp.data?.assets[0]?.assetCategory || "",
+        assetCondition: resp.data?.assets[0]?.assetCondition || "",
+        assetNote: resp.data?.assets[0]?.assetNote || "",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const hdlInputChange = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
     // console.log(input);
   };
-  const hdlCreateAsset = async (e) => {
+  const hdlFileChange = (e) => {
+    setFiles([...files, ...Array.from(e.target.files)]);
+  };
+  const removeImage = (idx) => {
+    setFiles(files.filter((v, i) => i !== idx));
+  };
+  const removeImageExisting = (assetPic) => {
+    setAsset((prv) => ({
+      ...prv,
+      assetPics: prv.assetPics.filter(
+        (el) => el.assetPicId !== assetPic.assetPicId
+      ),
+    }));
+    setPicToDelete((prv) => [...prv, assetPic]);
+  };
+  const hdlEditAsset = async (e) => {
     try {
       setLoading(true);
       //validate
-      if (files.length == 0) {
+      if ((files.length == 0) & (asset.assetPics.length == 0)) {
         setMessage("At least 1 image require!");
         document.getElementById("message_modal").showModal();
         setTimeout(() => {
@@ -69,15 +106,21 @@ export default function ShowCreateAsset() {
         return;
       }
       const body = new FormData();
+      body.append("assetId", currentAsset);
       body.append("assetName", input.assetName);
       body.append("assetBrand", input.assetBrand);
       body.append("assetCategory", input.assetCategory);
       body.append("assetCondition", input.assetCondition);
       body.append("assetNote", input.assetNote);
+      body.append("assetPics", JSON.stringify(asset.assetPics));
+      body.append("picToDelete", JSON.stringify(picToDelete));
       files.forEach((file) => {
         body.append("images", file);
       });
-      const resp = await axios.post("http://localhost:8000/api/asset/", body, {
+      //   for (let [key, value] of body.entries()) {
+      //     console.log(key, value);
+      //   }
+      const resp = await axios.patch("http://localhost:8000/api/asset/", body, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -95,7 +138,7 @@ export default function ShowCreateAsset() {
           assetCondition: "",
           assetNote: "",
         });
-        document.getElementById("create_asset_modal").close();
+        document.getElementById("edit_asset_modal").close();
         navigate(0);
       }, 1000);
     } catch (err) {
@@ -108,20 +151,24 @@ export default function ShowCreateAsset() {
       }, 1000);
     } finally {
       setLoading(false);
+      setFiles([]);
+      setCurrentAsset(0);
+      setPicToDelete([]);
     }
-  };
-  const hdlFileChange = (e) => {
-    setFiles([...files, ...Array.from(e.target.files)]);
-  };
-  const removeImage = (idx) => {
-    setFiles(files.filter((v, i) => i !== idx));
   };
   useEffect(() => {
     getUser();
-  }, []);
+    getAsset();
+  }, [currentAsset]);
   return (
     <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
-      {/* Create Asset */}
+      {/* Edit Asset */}
+      <div className="flex">
+        <button onClick={() => console.log(asset)}>Asset</button>
+        <button onClick={() => console.log(files)}>files</button>
+        <button onClick={() => console.log(picToDelete)}>picToDelete</button>
+      </div>
+
       <div>
         <div className="w-full h-[500px] flex gap-2">
           {/* picture area */}
@@ -137,9 +184,9 @@ export default function ShowCreateAsset() {
                 accept="image/*"
                 onChange={hdlFileChange}
               />
-              {Array.isArray(files) &&
-                files.length > 0 &&
-                files.map((el, idx) => (
+              {/* Asset pic list from server */}
+              {asset?.assetPics?.length > 0 &&
+                asset.assetPics.map((el, idx) => (
                   <div
                     key={idx}
                     className={`p-1 m-2 shadow-md flex gap-1 items-center relative ${
@@ -152,26 +199,48 @@ export default function ShowCreateAsset() {
                       </p>
                     )}
                     <img
-                      src={URL.createObjectURL(el)}
+                      src={el.assetPic}
                       alt="no load"
                       className="w-[100px] h-[100px] object-cover"
                     />
-                    <p className="flex-1 ml-2">{el.name}</p>
+                    <p className="flex-1 ml-2 overflow-hidden text-ellipsis">
+                      On Swapy Marketplace server...
+                    </p>
                     <IoTrashBin
                       className="p-2 text-[40px] text-my-acct cursor-pointer hover:text-my-btn-hover"
-                      onClick={() => removeImage(idx)}
+                      onClick={() => removeImageExisting(el)}
                     />
                   </div>
                 ))}
-              {files.length == 0 && (
-                <div className="flex flex-col items-center pt-5">
-                  <FaImage className="text-[80px]" />
-                  <p className="text-lg text-center">
-                    At least 1 image require <br />
-                    for create new asset.
-                  </p>
-                </div>
-              )}
+              {/* New picture */}
+              {Array.isArray(files) && files.length > 0
+                ? files.map((el, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-1 m-2 shadow-md flex gap-1 items-center relative ${
+                        asset?.assetPics?.length == 0 && idx == 0
+                          ? "border border-my-acct"
+                          : null
+                      }`}
+                    >
+                      {asset?.assetPics?.length == 0 && idx == 0 && (
+                        <p className="absolute top-1 left-1/2 -translate-x-1/2 text-my-acct font-bold">
+                          Thumbnail
+                        </p>
+                      )}
+                      <img
+                        src={URL.createObjectURL(el)}
+                        alt="no load"
+                        className="w-[100px] h-[100px] object-cover"
+                      />
+                      <p className="flex-1 ml-2">{el.name}</p>
+                      <IoTrashBin
+                        className="p-2 text-[40px] text-my-acct cursor-pointer hover:text-my-btn-hover"
+                        onClick={() => removeImage(idx)}
+                      />
+                    </div>
+                  ))
+                : null}
             </div>
             <button
               className="h-[40px] py-1 w-full mx-auto shadow-md bg-my-bg-card font-bold text-my-acct flex justify-center items-center gap-1 hover:bg-my-hover border border-my-acct mt-2"
@@ -304,13 +373,13 @@ export default function ShowCreateAsset() {
         </div>
         <button
           className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover mt-5"
-          onClick={hdlCreateAsset}
+          onClick={hdlEditAsset}
         >
           {loading && (
             <span className="loading loading-spinner text-my-text"></span>
           )}
           <ImBoxAdd />
-          Create New Asset
+          Update Asset
         </button>
       </div>
       {/* loading */}
@@ -335,6 +404,8 @@ export default function ShowCreateAsset() {
               assetNote: "",
             });
             setFiles([]);
+            setCurrentAsset(0);
+            setPicToDelete([]);
             e.target.closest("dialog").close();
           }}
         >

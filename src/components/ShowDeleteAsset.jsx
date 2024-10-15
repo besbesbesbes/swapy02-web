@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
-import { MdLocalOffer } from "react-icons/md";
-import axios from "axios";
-import useUserStore from "../store/user-store";
+import ShowMessage from "./ShowMessage";
+import { useEffect, useState } from "react";
 import useAssetStore from "../store/asset-store";
-import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import useUserStore from "../store/user-store";
+import useOtherStore from "../store/other-store";
+import { useNavigate } from "react-router-dom";
 
-export default function ShowAsset() {
+export default function ShowDeleteAsset() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const message = useOtherStore((state) => state.message);
+  const setMessage = useOtherStore((state) => state.setMessage);
   const currentAsset = useAssetStore((state) => state.currentAsset);
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const [selectedPic, setSelectedPic] = useState(0);
   const [assets, setAssets] = useState([]);
-  const user = useUserStore((state) => state.user);
   const token = useUserStore((state) => state.token);
   const hdlClosePopup = (e) => {
     setAssets([]);
@@ -32,38 +35,35 @@ export default function ShowAsset() {
       console.log(err.message);
     }
   };
-  const hdlCreateOffer = async () => {
+  const hdlDeleteAsset = async () => {
     try {
-      const result = await axios.post(
-        "http://localhost:8000/api/offer/createOffer/" + currentAsset,
-        {},
+      setLoading(true);
+      const resp = await axios.delete(
+        "http://localhost:8000/api/asset/" + currentAsset,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      // addMessage
-      const body = {
-        messageTxt: `Offeror create new offer with [${result.data.returnOffer.offerAssets[0].asset.assetName}]`,
-        messageIsAuto: "true",
-        userId: user.userId,
-        offerId: result.data.returnOffer.offerId,
-      };
-      await axios.post("http://localhost:8000/api/msg", body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      //navigate
-      if (location.pathname == "/offer") {
+      setMessage("Delete asset sucessful...");
+      document.getElementById("message_modal").showModal();
+      setTimeout(() => {
+        document.getElementById("message_modal").close();
+        setMessage("");
+        document.getElementById("delete_asset_modal").close();
         navigate(0);
-      } else {
-        navigate("/offer");
-      }
-      console.log(result.data);
+      }, 1000);
     } catch (err) {
       console.log(err.message);
+      setMessage(err?.response?.data?.msg || err.message);
+      document.getElementById("message_modal").showModal();
+      setTimeout(() => {
+        document.getElementById("message_modal").close();
+        setMessage("");
+      }, 1000);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -72,13 +72,9 @@ export default function ShowAsset() {
     }
   }, [currentAsset]);
   return (
-    <div
-      className="w-6/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
-      {/* <button onClick={() => console.log(user)}>Test</button> */}
+    <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
+      <button onClick={() => console.log(assets)}>assets</button>
+      <button onClick={() => console.log(currentAsset)}>currentAsset</button>
       <div className="flex w-full h-[400px]">
         {/* picture */}
         <div className="w-6/12 h-full flex flex-col p-5">
@@ -184,38 +180,38 @@ export default function ShowAsset() {
           </div>
         </div>
       </div>
-      {/* button */}
-      {Object.keys(user).length > 0 &&
-        user.userIsReady &&
-        user.userId !== assets.userId &&
-        assets.assetStatus == "READY" && (
-          <div className="flex justify-center items-center mt-2">
-            <button
-              className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover"
-              onClick={hdlCreateOffer}
-            >
-              <MdLocalOffer className="-translate-y-[1px]" />
-              Make New Offer
-            </button>
-          </div>
+      <button
+        className="h-[40px] py-1 w-[200px] mx-auto shadow-md bg-my-acct font-bold text-my-text flex justify-center items-center gap-1 hover:bg-my-btn-hover mt-5"
+        onClick={hdlDeleteAsset}
+      >
+        {loading && (
+          <span className="loading loading-spinner text-my-text"></span>
         )}
-      {assets.assetStatus !== "READY" && assets.assetStatus !== "CREATED" && (
-        <div className="flex justify-center text-xl font-bold">
-          <p className="text-my-acct">Asset has already matched</p>
-        </div>
-      )}
-      {user.userId == assets.userId && (
-        <div className="flex justify-center text-xl font-bold">
-          <p>...This is your asset...</p>
+        <RiDeleteBin5Fill />
+        Delete Asset
+      </button>
+      {/* loading */}
+      {loading && (
+        <div>
+          <div className="absolute w-full h-full inset-0 bg-black opacity-20"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <span className="loading loading-spinner text-my-acct w-[150px]"></span>
+          </div>
         </div>
       )}
       {/* close button */}
-      <button
-        className="w-[50px] h-[50px] bg-my-acct text-my-text rounded-full text-4xl font-bold absolute flex justify-center items-center top-0 right-0 translate-x-4 -translate-y-4 shadow-md hover:bg-my-btn-hover"
-        onClick={hdlClosePopup}
-      >
-        <IoIosClose />
-      </button>
+      {!loading && (
+        <button
+          className="w-[50px] h-[50px] bg-my-acct text-my-text rounded-full text-4xl font-bold absolute flex justify-center items-center top-0 right-0 translate-x-4 -translate-y-4 shadow-md hover:bg-my-btn-hover"
+          onClick={hdlClosePopup}
+        >
+          <IoIosClose />
+        </button>
+      )}
+      {/* Modal message */}
+      <dialog id="message_modal" className="modal">
+        <ShowMessage />
+      </dialog>
     </div>
   );
 }
