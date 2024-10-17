@@ -60,7 +60,7 @@ export default function ShowChangeProfile() {
     }
   };
   return (
-    <div className="w-3/12 min-h-[100px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10 items-center">
+    <div className="w-4/12 min-h-[100px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10 items-center">
       <input
         type="file"
         className="opacity-0 absolute"

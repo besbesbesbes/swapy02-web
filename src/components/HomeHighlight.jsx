@@ -33,13 +33,13 @@ const HomeHighlight = () => {
             <img
               src={el.assetThumbnail}
               alt="Not Load"
-              className="max-w-[150px] object-cover"
+              className="max-w-[100px] object-cover"
             />
-            <div className="flex flex-col justify-between">
-              <div className="flex flex-col gap-1">
+            <div className="flex flex-col justify-between h-full w-full">
+              <div className="flex flex-col gap-1 flex-1">
                 <p className="font-bold">{el.assetName}</p>
                 <p>{el.assetBrand}</p>
-                <p className="text-xs font-extralight h-[100px] overflow-hidden">
+                <p className="text-[10px] font-extralight overflow-hidden  h-20">
                   "{el.assetNote}"
                 </p>
               </div>

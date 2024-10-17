@@ -94,7 +94,7 @@ export default function ShowAddAssetOffer() {
     }
   };
   return (
-    <div className="w-4/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
+    <div className="w-5/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
       <div className="w-full  h-[450px] overflow-auto flex flex-col gap-4">
         {assets.length == 0 ? (
           <div className="mt-[100px] flex flex-col items-center">

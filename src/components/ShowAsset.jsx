@@ -73,7 +73,7 @@ export default function ShowAsset() {
   }, [currentAsset]);
   return (
     <div
-      className="w-6/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10"
+      className="w-8/12 min-h-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10"
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -175,7 +175,7 @@ export default function ShowAsset() {
             <div className=" flex">
               <p className="min-w-3/12 font-bold">Note :</p>
               <textarea
-                className="flex-1 bg-my-bg-card"
+                className="flex-1 bg-my-bg-card text-[12px]"
                 rows="7"
                 value={assets.assetNote}
                 disabled

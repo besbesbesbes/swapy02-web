@@ -120,7 +120,7 @@ export default function ShowCreateAsset() {
     getUser();
   }, []);
   return (
-    <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
+    <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
       {/* Create Asset */}
       <div>
         <div className="w-full h-[500px] flex gap-2">

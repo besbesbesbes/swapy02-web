@@ -90,7 +90,7 @@ export default function ShowOffer() {
   };
   return (
     <>
-      <div className="w-8/12 min-h-[550px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
+      <div className="w-8/12 min-h-[550px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
         {/* offer detail */}
         <div className="bg-my-bg-card w-full shadow-md p-2">
           {/* head tag */}
@@ -205,9 +205,9 @@ export default function ShowOffer() {
           {/* box */}
           <div className="flex justify-between gap-5">
             {/* swaper box */}
-            <div className="w-1/2 min-h-[400px] border-2 border-my-prim bg-my-prim flex flex-col justify-between py-2">
+            <div className="w-1/2 min-h-[350px] border-2 border-my-prim bg-my-prim flex flex-col justify-between py-2">
               {/* swaper asset card */}
-              <div className="flex flex-col h-[350px] gap-2 overflow-y-scroll px-5 bg-my-bg-card py-2">
+              <div className="flex flex-col h-[300px] gap-2 overflow-y-scroll px-5 bg-my-bg-card py-2">
                 {/* card */}
                 {offer.offerAssets &&
                   offer?.offerAssets.map((el, idx) => {
@@ -239,9 +239,9 @@ export default function ShowOffer() {
               </div>
             </div>
             {/* offeror box */}
-            <div className="w-1/2 min-h-[400px] border-2 border-my-acct bg-my-acct flex flex-col justify-between py-2">
+            <div className="w-1/2 min-h-[350px] border-2 border-my-acct bg-my-acct flex flex-col justify-between py-2">
               {/* offeror asset card */}
-              <div className="flex flex-col h-[350px] gap-2 overflow-y-scroll px-5 bg-my-bg-card py-2">
+              <div className="flex flex-col h-[300px] gap-2 overflow-y-scroll px-5 bg-my-bg-card py-2">
                 {/* card */}
                 {offer.offerAssets &&
                   offer?.offerAssets.map((el, idx) => {

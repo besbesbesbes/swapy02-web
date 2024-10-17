@@ -3,7 +3,7 @@ import { IoIosClose } from "react-icons/io";
 export default function ShowContactUs() {
   return (
     <div
-      className="w-4/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10"
+      className="w-4/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10"
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -12,7 +12,7 @@ export default function ShowContactUs() {
       <img src="./src/pics/contact-us-qr.png" alt="no load" />
       {/* link */}
       <a
-        href="https://www.google.com"
+        href="https://linktr.ee/besbesbes"
         target="_blank"
         rel="noopener noreferrer"
         className="text-my-prim font-bold text-center text-xl"

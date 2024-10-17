@@ -59,11 +59,11 @@ export default function ShowChangePassword() {
     }
   };
   return (
-    <div className="w-3/12 min-h-[100px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
+    <div className="w-4/12 min-h-[100px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
       <form className="flex flex-col gap-2" onSubmit={hdlChangePassword}>
         <p className="font-bold">Current Password :</p>
         <input
-          type="text"
+          type="password"
           className="border h-[37px] w-full px-2"
           name="curPwd"
           value={input.curPwd}
@@ -71,7 +71,7 @@ export default function ShowChangePassword() {
         />
         <p className="font-bold">New Password :</p>
         <input
-          type="text"
+          type="password"
           className="border  h-[37px] w-full px-2"
           name="newPwd"
           value={input.newPwd}
@@ -79,7 +79,7 @@ export default function ShowChangePassword() {
         />
         <p className="font-bold">Confirm New Password :</p>
         <input
-          type="text"
+          type="password"
           className="border  h-[37px] w-full px-2"
           name="cnewPwd"
           value={input.cnewPwd}

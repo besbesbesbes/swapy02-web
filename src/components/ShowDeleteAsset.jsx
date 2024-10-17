@@ -72,7 +72,7 @@ export default function ShowDeleteAsset() {
     }
   }, [currentAsset]);
   return (
-    <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col p-10">
+    <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
       <button onClick={() => console.log(assets)}>assets</button>
       <button onClick={() => console.log(currentAsset)}>currentAsset</button>
       <div className="flex w-full h-[400px]">

@@ -102,7 +102,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
   }, []);
   return (
     <div
-      className="w-5/12 min-h-[100px] min-w-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-2/3 -translate-x-1/2 flex flex-col py-10 px-32"
+      className="w-5/12 min-h-[100px] min-w-[500px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col py-10 px-32"
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -127,7 +127,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
             />
             <p className="font-bold">Password :</p>
             <input
-              type="text"
+              type="password"
               className="border  h-[37px] w-full px-2"
               name="inputPass"
               value={input.inputPass}
@@ -173,7 +173,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
             />
             <p className="font-bold">Password :</p>
             <input
-              type="text"
+              type="password"
               className="border  h-[37px] w-full px-2"
               name="inputNewPass"
               value={input.inputNewPass}
@@ -181,7 +181,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
             />
             <p className="font-bold">Confirm Password :</p>
             <input
-              type="text"
+              type="password"
               className="border  h-[37px] w-full px-2"
               name="inputNewPassConfirm"
               value={input.inputNewPassConfirm}
