@@ -173,13 +173,15 @@ const AssetsList = () => {
                   Edit
                 </button>
               )}
-              <button
-                className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover"
-                onClick={(e) => hdlDeleteAsset(e, el)}
-              >
-                <RiDeleteBin5Fill />
-                Delete
-              </button>
+              {(el.assetStatus == "CREATED" || el.assetStatus == "READY") && (
+                <button
+                  className="py-1 px-2 bg-my-acct text-my-text w-full font-bold flex justify-center items-center gap-1 hover:bg-my-btn-hover"
+                  onClick={(e) => hdlDeleteAsset(e, el)}
+                >
+                  <RiDeleteBin5Fill />
+                  Delete
+                </button>
+              )}
             </div>
             {/* badge status */}
             <div className="px-2 mp-1 bg-my-acct absolute font-bold text-my-text rounded-xl top-0 left-0 -translate-x-3 -translate-y-3">

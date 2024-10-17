@@ -107,12 +107,19 @@ const Header = () => {
                   Logout
                 </button>
                 <p>
-                  Welcome, <span className="font-bold">{user.userName}</span>
+                  Welcome,{" "}
+                  <span
+                    className="font-bold cursor-pointer"
+                    onClick={() => navigate("/userinfo")}
+                  >
+                    {user.userName}
+                  </span>
                 </p>
                 <img
-                  className="w-[40px] h-[40px] object-cover rounded-full shadow-md  ml-2"
+                  className="w-[40px] h-[40px] object-cover rounded-full shadow-md  ml-2 cursor-pointer"
                   src={user.userProfilePic}
                   alt="noload"
+                  onClick={() => navigate("/userinfo")}
                 />
               </div>
             ) : (

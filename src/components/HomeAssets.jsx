@@ -17,6 +17,14 @@ const HomeAssets = () => {
   useEffect(() => {
     getAllAssets();
   }, []);
+  const dayFromCreate = (createdAt) => {
+    const creationDate = new Date(createdAt);
+    const currentDate = new Date();
+    const diffTime = currentDate - creationDate;
+    const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return diffDay;
+  };
+
   return (
     <div>
       {/* <button onClick={()=>{console.log(assets)}}>Test</button> */}
@@ -67,7 +75,7 @@ const HomeAssets = () => {
                 ) : null}
               </div>
               {/* new badge */}
-              {el.assetId % 5 == 0 && (
+              {dayFromCreate(el.createdAt) <= 10 && (
                 <div className="w-[100px] h-[40px] text-center pt-4 absolute left-0 top-0 bg-my-prim text-my-text -rotate-45 -translate-x-10 -translate-y-2">
                   <p className="text-xs font-bold translate-y-1">NEW</p>
                 </div>

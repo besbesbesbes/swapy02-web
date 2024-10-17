@@ -89,7 +89,7 @@ export default function HomeSearch() {
                 ) : null}
               </div>
               {/* new badge */}
-              {el.assetId % 5 == 0 && (
+              {el.asset_is_new && (
                 <div className="w-[100px] h-[40px] text-center pt-4 absolute left-0 top-0 bg-my-prim text-my-text -rotate-45 -translate-x-10 -translate-y-2">
                   <p className="text-xs font-bold translate-y-1">NEW</p>
                 </div>

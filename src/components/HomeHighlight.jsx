@@ -30,7 +30,11 @@ const HomeHighlight = () => {
             className="w-[400px] h-[190px] bg-my-bg-card p-4 flex gap-4 relative shadow-md hover:bg-my-hover cursor-pointer"
             onClick={() => hdlShowAssets(el)}
           >
-            <img src={el.assetThumbnail} alt="Not Load" />
+            <img
+              src={el.assetThumbnail}
+              alt="Not Load"
+              className="max-w-[150px] object-cover"
+            />
             <div className="flex flex-col justify-between">
               <div className="flex flex-col gap-1">
                 <p className="font-bold">{el.assetName}</p>
@@ -57,14 +61,18 @@ const HomeHighlight = () => {
               </div>
             </div>
             {/* absolute icon */}
-            <div className="flex gap-2 absolute top-0 left-0 px-2 rounded-full bg-my-prim text-my-text items-baseline -translate-y-2 shadow-md">
-              <p className="text-xs">Swaper :</p>
-              <p className=" font-bold">{el.assetSwaperCount}</p>
-            </div>
-            <div className="flex gap-2 absolute top-0 right-0 px-2 rounded-full bg-my-acct text-my-text items-baseline -translate-y-2 shadow-md">
-              <p className="text-xs">Offer :</p>
-              <p className=" font-bold">{el.assetOfferorCount}</p>
-            </div>
+            {el.assetSwaperCount > 0 && (
+              <div className="flex gap-2 absolute top-0 left-0 px-2 rounded-full bg-my-prim text-my-text items-baseline -translate-y-2 shadow-md">
+                <p className="text-xs">Swaper :</p>
+                <p className=" font-bold">{el.assetSwaperCount}</p>
+              </div>
+            )}
+            {el.assetOfferorCount > 0 && (
+              <div className="flex gap-2 absolute top-0 right-0 px-2 rounded-full bg-my-acct text-my-text items-baseline -translate-y-2 shadow-md">
+                <p className="text-xs">Offer :</p>
+                <p className=" font-bold">{el.assetOfferorCount}</p>
+              </div>
+            )}
           </div>
         );
       })}
