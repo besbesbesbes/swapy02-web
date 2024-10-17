@@ -13,6 +13,8 @@ import ShowLogin from "./ShowLogin";
 import ShowContactUs from "./ShowContactUs";
 import useUserStore from "../store/user-store";
 import axios from "axios";
+import ShowMessage from "./ShowMessage";
+import useOtherStore from "../store/other-store";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,12 +23,14 @@ const Header = () => {
   const setUser = useUserStore((state) => state.setUser);
   const token = useUserStore((state) => state.token);
   const setToken = useUserStore((state) => state.setToken);
+  const setMessage = useOtherStore((state) => state.setMessage);
+  const message = useOtherStore((state) => state.message);
   // -----------------------------------------------------------------------
   const [suggestions, setSuggestions] = useState([]);
   const [assets, setAssets] = useState([]);
   const getAssets = async () => {
     try {
-      const resp = await axios.get("http://localhost:8000/api/search");
+      const resp = await axios.get("http://localhost:8000/api/search?p=0");
       setAssets(resp.data.assets);
     } catch (err) {
       console.log(err);
@@ -40,7 +44,13 @@ const Header = () => {
     setToken("");
     setUser({});
     localStorage.clear();
-    navigate("/");
+    setMessage("Logout sucessful...");
+    document.getElementById("message_modal").showModal();
+    setTimeout(() => {
+      document.getElementById("message_modal").close();
+      setMessage("");
+      navigate("/");
+    }, 1000);
   };
   const hdlChangeInput = (e) => {
     const value = e.target.value;
@@ -69,25 +79,22 @@ const Header = () => {
   return (
     <div className="w-full text-my-text font-extralight">
       <div className=" h-[100px] pt-2 px-3 flex flex-col justify-between bg-my-prim bg-header-pattern">
-        <div className="flex justify-between">
+        <div className="flex justify-between" onClick={() => navigate("/")}>
           {/* swapy logo */}
-          <Link to="/">
-            <div className="flex items-end gap-2 mt-3 cursor-pointer">
-              <div className="flex justify-center items-center -translate-y-1">
-                <p
-                  className=" w-[35px] h-[35px] text-center text-xl font-bold p-1 text-my-text bg-my-acct flex justify-center items-center border-2"
-                  to="/"
-                >
-                  <RiSwap2Line className="text-white text-[200px]" />
-                </p>
-              </div>
-              <p className="text-lg font-bold font-serif mr-2">Swapy</p>
-              <p className="text-xs mb-1">
-                {" "}
-                | Swap, Save, Share - The P2P Marketplace for Everyone...
+
+          <div className="flex items-end gap-2 mt-3 cursor-pointer">
+            <div className="flex justify-center items-center -translate-y-1">
+              <p className=" w-[35px] h-[35px] text-center text-xl font-bold p-1 text-my-text bg-my-acct flex justify-center items-center border-2">
+                <RiSwap2Line className="text-white text-[200px]" />
               </p>
             </div>
-          </Link>
+            <p className="text-lg font-bold font-serif mr-2">Swapy</p>
+            <p className="text-xs mb-1">
+              {" "}
+              | Swap, Save, Share - The P2P Marketplace for Everyone...
+            </p>
+          </div>
+
           {/* menu login contact */}
           <div className="flex justify-end gap-1 text-my-text">
             {/* <button onClick={() => console.log(user)}>Test</button> */}
@@ -224,6 +231,10 @@ const Header = () => {
       {/* Modal contactUs */}
       <dialog id="conatactUs_modal" className="modal">
         <ShowContactUs />
+      </dialog>
+      {/* Modal message */}
+      <dialog id="message_modal" className="modal">
+        <ShowMessage />
       </dialog>
     </div>
   );
