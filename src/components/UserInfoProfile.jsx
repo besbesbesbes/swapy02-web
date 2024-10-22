@@ -84,7 +84,7 @@ const UserInfoProfile = () => {
   }, [userInfo]);
   return (
     <div>
-      <div className="w-5/12 h-[150px]  mx-auto flex gap-4">
+      <div className="w-6/12 h-[150px]  mx-auto flex gap-4">
         {/* <button onClick={() => console.log(user)}>Test</button> */}
         {/* profile pic */}
         <div
@@ -161,7 +161,7 @@ const UserInfoProfile = () => {
       </div>
       <form>
         {/* bio */}
-        <div className="w-5/12 h-[150px] mx-auto  flex flex-col py-2 mt-3">
+        <div className="w-6/12 h-[150px] mx-auto  flex flex-col py-2 mt-3">
           <p className="font-bold">Bio :</p>
           <textarea
             className="h-full resize-none border p-2"
@@ -171,7 +171,7 @@ const UserInfoProfile = () => {
           ></textarea>
         </div>
         {/* shippping location */}
-        <div className="w-5/12 h-[50px] mx-auto  flex py-2 mt-3 items-center gap-2">
+        <div className="w-6/12 h-[50px] mx-auto  flex py-2 mt-3 items-center gap-2">
           <p className="font-bold w-5/12">Shipping Location :</p>
           <input
             className="h-full resize-none border p-2 w-full"
@@ -181,7 +181,7 @@ const UserInfoProfile = () => {
           />
         </div>
         {/* shipping address */}
-        <div className="w-5/12 h-[150px] mx-auto  flex flex-col py-2 mt-3">
+        <div className="w-6/12 h-[150px] mx-auto  flex flex-col py-2 mt-3">
           <p className="font-bold">Shipping Address :</p>
           <textarea
             className="h-full resize-none border p-2"

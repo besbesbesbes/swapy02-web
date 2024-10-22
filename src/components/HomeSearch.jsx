@@ -102,7 +102,8 @@ export default function HomeSearch() {
         {searchParams.get("v") && <p>search:{searchParams.get("v")}</p>}
       </div>
       <div className="bg-my-bg-card pb-5">
-        <div className="w-full min-h-[500px] bg-my-bg-main flex justify-evenly items-start p-4 flex-wrap gap-4 i">
+        {/* <div className="w-full min-h-[500px] bg-my-bg-main flex justify-evenly items-start p-4 flex-wrap gap-4"> */}
+        <div className="w-full min-h-[500px] bg-my-bg-main grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
           {assets.length == 0 && (
             <div className="mt-[100px] flex flex-col items-center gap-2">
               <FaSearchMinus className="text-my-acct text-[100px]" />

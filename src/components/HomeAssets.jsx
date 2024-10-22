@@ -53,7 +53,8 @@ const HomeAssets = () => {
       {/* <button onClick={()=>{console.log(assets)}}>Test</button> */}
       <div className="w-full bg-my-bg-main flex flex-col justify-center items-center">
         {/* asset list area */}
-        <div className="flex justify-evenly items-center p-4 flex-wrap gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 p-4 gap-4">
+          {/* <div className="flex justify-evenly items-center p-4 flex-wrap gap-4"> */}
           {/* create your asset */}
           {/* <div className="w-[170px] h-[220px] shadow-md flex flex-col items-center gap-2 overflow-hidden hover:bg-my-hover  cursor-pointer">
             <div className="w-full h-full p-4 bg-my-hover">

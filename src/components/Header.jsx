@@ -100,9 +100,10 @@ const Header = () => {
             {/* <button onClick={() => console.log(user)}>Test</button> */}
             <button
               className="px-2 flex gap-1"
-              onClick={() =>
-                document.getElementById("conatactUs_modal").showModal()
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                document.getElementById("conatactUs_modal").showModal();
+              }}
             >
               <FaPhone />
               Contact us
