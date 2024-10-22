@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useUserStore from "../store/user-store";
 import axios from "axios";
 import { RiSwap2Line } from "react-icons/ri";
+import { login, logout } from "../apis/auth-api";
 
 export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
   const [loginErr, setLoginErr] = useState(false);
@@ -26,7 +27,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
   const hdlLogin = async (e) => {
     e.preventDefault();
     try {
-      const resp = await axios.post("http://localhost:8000/api/auth/login", {
+      const resp = await login({
         name: input.inputUser,
         password: input.inputPass,
       });
@@ -67,7 +68,7 @@ export default function ShowLogin({ ctrlShowLogin, setCtrlShowLogin }) {
     setRegisErr(false);
     //register
     try {
-      const resp = await axios.post("http://localhost:8000/api/auth/register", {
+      const resp = await logout({
         name: input.inputNewUser,
         password: input.inputNewPass,
         email: input.inputNewEmail,
