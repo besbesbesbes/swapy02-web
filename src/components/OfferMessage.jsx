@@ -77,7 +77,7 @@ export default function OfferMessage() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(resp.data.msg);
+      // console.log(resp.data.msg);
       setInput("");
       getOfferMessage();
     } catch (err) {

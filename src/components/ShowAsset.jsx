@@ -26,7 +26,7 @@ export default function ShowAsset() {
       const result = await axios.get(
         "http://localhost:8000/api/search/all?a=" + currentAsset
       );
-      console.log(result.data.assets[0]);
+      // console.log(result.data.assets[0]);
       setAssets(result.data.assets[0]);
     } catch (err) {
       console.log(err.message);
@@ -61,7 +61,7 @@ export default function ShowAsset() {
       } else {
         navigate("/offer");
       }
-      console.log(result.data);
+      // console.log(result.data);
     } catch (err) {
       console.log(err.message);
     }

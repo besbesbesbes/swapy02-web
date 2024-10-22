@@ -18,6 +18,7 @@ export default function HomeSearch() {
   const [totalPage, setTotalPage] = useState(1);
   const getAllAssets = async () => {
     let result;
+    // console.log(page);
     searchParams.get("c")
       ? (result = await axios.get(
           "http://localhost:8000/api/search?c=" +
@@ -43,6 +44,9 @@ export default function HomeSearch() {
     setAssets([]);
     getAllAssets();
   }, [searchParams]);
+  useEffect(() => {
+    getAllAssets();
+  }, [page]);
   const dayFromCreate = (createdAt) => {
     const creationDate = new Date(createdAt);
     const currentDate = new Date();
@@ -80,6 +84,7 @@ export default function HomeSearch() {
       {/* header */}
       {/* <button onClick={() => console.log(cat)}>Test</button> */}
       <div className="flex text-xl w-full bg-my-bg-card px-5 py-1 ">
+        {/* <button onClick={() => console.log(page)}>Test</button> */}
         <Link to="/">
           <div className="flex items-center gap-1">
             <IoHomeSharp className="-translate-y-[1px]" />

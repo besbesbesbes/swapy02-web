@@ -40,7 +40,7 @@ export default function OfferDetail() {
           },
         }
       );
-      console.log(resp.data);
+      // console.log(resp.data);
       setOffer(resp.data.returnOffer);
     } catch (err) {
       console.log(err);
@@ -66,7 +66,7 @@ export default function OfferDetail() {
           },
         }
       );
-      console.log(resp.data);
+      // console.log(resp.data);
       // addMessage
       const body = {
         messageTxt: `Remove [${resp.data.delOfferAsset.asset.assetName}] on ${

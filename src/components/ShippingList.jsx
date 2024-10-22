@@ -33,7 +33,7 @@ export default function ShippingList() {
         },
       }
     );
-    console.log(resp.data);
+    // console.log(resp.data);
     setAssets(resp.data.assets);
   };
   useEffect(() => {

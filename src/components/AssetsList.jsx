@@ -36,7 +36,7 @@ const AssetsList = () => {
           },
         }
       );
-      console.log(resp.data);
+      // console.log(resp.data);
       setAssets(resp.data.assets);
     } catch (err) {
       console.log(err);

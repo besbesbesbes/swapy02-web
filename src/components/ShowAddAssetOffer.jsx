@@ -38,7 +38,7 @@ export default function ShowAddAssetOffer() {
           },
         }
       );
-      console.log(resp.data.assets);
+      // console.log(resp.data.assets);
       setAssets(resp.data.assets);
     } catch (err) {
       console.log(err);
@@ -64,7 +64,7 @@ export default function ShowAddAssetOffer() {
           },
         }
       );
-      console.log(resp.data);
+      // console.log(resp.data);
       // addMessage
       const body = {
         messageTxt: `Add [${resp.data.newOfferAsset.asset.assetName}] on ${

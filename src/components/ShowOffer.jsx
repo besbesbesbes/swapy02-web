@@ -28,7 +28,7 @@ export default function ShowOffer() {
     document.getElementById("asset_modal").showModal();
   };
   const getOfferDetail = async () => {
-    console.log("-------------------------", currentOffer);
+    // console.log("-------------------------", currentOffer);
     try {
       const resp = await axios.get(
         "http://localhost:8000/api/offer/getdetail/" + currentOffer,
@@ -38,7 +38,7 @@ export default function ShowOffer() {
           },
         }
       );
-      console.log(resp.data.returnOffer);
+      // console.log(resp.data.returnOffer);
       setOffer(resp.data.returnOffer);
     } catch (err) {
       console.log(err.message);

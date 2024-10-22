@@ -50,7 +50,7 @@ export default function ShowEditAsset() {
         "http://localhost:8000/api/search/all?a=" + currentAsset
       );
       setAsset(resp.data.assets[0]);
-      console.log(resp.data);
+      // console.log(resp.data);
       setInput({
         assetName: resp.data?.assets[0]?.assetName || "",
         assetBrand: resp.data?.assets[0]?.assetBrand || "",
