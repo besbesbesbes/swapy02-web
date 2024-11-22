@@ -89,7 +89,7 @@ const Header = () => {
                 <RiSwap2Line className="text-white text-[200px]" />
               </p>
             </div>
-            <p className="text-lg font-bold font-serif mr-2">Swapy</p>
+            <p className="text-lg font-bold font-serif mr-2">Swapy02</p>
             <p className="text-xs mb-1">
               {" "}
               | Swap, Save, Share - The P2P Marketplace for Everyone...
