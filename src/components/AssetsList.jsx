@@ -13,6 +13,7 @@ import ShowMessage from "./ShowMessage";
 import useOtherStore from "../store/other-store";
 import ShowEditAsset from "./ShowEditAsset";
 import ShowDeleteAsset from "./ShowDeleteAsset";
+import { getAssetsApi, hdlReadyApi } from "../apis/asset-api";
 
 const AssetsList = () => {
   const token = useUserStore((state) => state.token);
@@ -28,14 +29,7 @@ const AssetsList = () => {
   const [isCreateAssetOpen, setIsCreateAssetOpen] = useState(false);
   const getAssets = async () => {
     try {
-      const resp = await axios.get(
-        "http://localhost:8000/api/search/all?i=" + user.userId,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const resp = await getAssetsApi(token, user);
       // console.log(resp.data);
       setAssets(resp.data.assets);
     } catch (err) {
@@ -53,17 +47,8 @@ const AssetsList = () => {
   };
   const hdlReady = async (e, el) => {
     e.stopPropagation();
-    console.log("http://localhost:8000/api/asset/assetReady/" + el.assetId);
     try {
-      const resp = await axios.post(
-        "http://localhost:8000/api/asset/assetReady/" + el.assetId,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const resp = await hdlReadyApi(token, el);
       setMessage(resp.data.msg);
       document.getElementById("message_modal").showModal();
       setTimeout(() => {

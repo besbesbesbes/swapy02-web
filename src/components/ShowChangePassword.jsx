@@ -4,6 +4,7 @@ import { IoIosClose } from "react-icons/io";
 import useUserStore from "../store/user-store";
 import ShowMessage from "./ShowMessage";
 import userOtherStore from "../store/other-store";
+import { changePasswordApi } from "../apis/user-api";
 export default function ShowChangePassword() {
   const token = useUserStore((state) => state.token);
   const message = userOtherStore((state) => state.message);
@@ -27,15 +28,7 @@ export default function ShowChangePassword() {
   const hdlChangePassword = async (e) => {
     e.preventDefault();
     try {
-      const resp = await axios.post(
-        "http://localhost:8000/api/user/change-password",
-        input,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const resp = await changePasswordApi(token, input);
       console.log(resp.data.msg);
       setMessage(resp.data.msg);
       document.getElementById("message_modal").showModal();

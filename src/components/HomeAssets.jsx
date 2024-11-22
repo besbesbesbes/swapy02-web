@@ -3,6 +3,8 @@ import ShowAsset from "./ShowAsset";
 import axios from "axios";
 import useAssetStore from "../store/asset-store";
 import { FaAngleDoubleDown } from "react-icons/fa";
+import { getAllAssetsApi, getAllAssetsLoadMoreApi } from "../apis/search-api";
+import "animate.css";
 const HomeAssets = () => {
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
   const [assets, setAssets] = useState([]);
@@ -14,9 +16,7 @@ const HomeAssets = () => {
   };
   const getAllAssets = async () => {
     try {
-      const result = await axios.get(
-        "http://localhost:8000/api/search?p=" + page
-      );
+      const result = await getAllAssetsApi(page);
       setAssets(result.data.assets);
       setTotalPage(Math.ceil(result.data.totalAssetsCount / 24));
     } catch (err) {
@@ -26,9 +26,7 @@ const HomeAssets = () => {
   const hdlLoadMore = async () => {
     try {
       setPage(page + 1);
-      const result = await axios.get(
-        "http://localhost:8000/api/search?p=" + (page + 1)
-      );
+      const result = await getAllAssetsLoadMoreApi(page);
       setAssets((prv) => [...prv, ...result.data.assets]);
     } catch (err) {
       console.log(err.message);
@@ -70,7 +68,7 @@ const HomeAssets = () => {
             return (
               <div
                 key={idx}
-                className="bg-my-bg-card w-[170px] h-[230px] shadow-md flex flex-col items-center gap-2 overflow-hidden p-2 hover:bg-my-hover  cursor-pointer relative"
+                className="bg-my-bg-card w-[170px] h-[230px] shadow-md flex flex-col items-center gap-2 overflow-hidden p-2 hover:bg-my-hover  cursor-pointer relative animate__animated animate__zoomIn"
                 onClick={(e) => {
                   hdlShowAssets(el);
                 }}

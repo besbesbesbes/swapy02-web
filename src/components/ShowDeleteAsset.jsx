@@ -7,6 +7,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 import useUserStore from "../store/user-store";
 import useOtherStore from "../store/other-store";
 import { useNavigate } from "react-router-dom";
+import { deleteAasetApi, getAssetByIdApi } from "../apis/search-api";
 
 export default function ShowDeleteAsset() {
   const navigate = useNavigate();
@@ -26,9 +27,7 @@ export default function ShowDeleteAsset() {
   };
   const getAssets = async () => {
     try {
-      const result = await axios.get(
-        "http://localhost:8000/api/search/all?a=" + currentAsset
-      );
+      const result = await getAssetByIdApi(currentAsset);
       console.log(result.data.assets[0]);
       setAssets(result.data.assets[0]);
     } catch (err) {
@@ -38,14 +37,7 @@ export default function ShowDeleteAsset() {
   const hdlDeleteAsset = async () => {
     try {
       setLoading(true);
-      const resp = await axios.delete(
-        "http://localhost:8000/api/asset/" + currentAsset,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const resp = await deleteAasetApi(token, currentAsset);
       setMessage("Delete asset sucessful...");
       document.getElementById("message_modal").showModal();
       setTimeout(() => {
@@ -73,8 +65,8 @@ export default function ShowDeleteAsset() {
   }, [currentAsset]);
   return (
     <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
-      <button onClick={() => console.log(assets)}>assets</button>
-      <button onClick={() => console.log(currentAsset)}>currentAsset</button>
+      {/* <button onClick={() => console.log(assets)}>assets</button>
+      <button onClick={() => console.log(currentAsset)}>currentAsset</button> */}
       <div className="flex w-full h-[400px]">
         {/* picture */}
         <div className="w-6/12 h-full flex flex-col p-5">

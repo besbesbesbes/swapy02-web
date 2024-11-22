@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { IoTrashBin } from "react-icons/io5";
 import { FaImage } from "react-icons/fa";
 import useAssetStore from "../store/asset-store";
+import { getUserInfoApi } from "../apis/user-api.jsx";
+import { createAssetApi } from "../apis/asset-api.jsx";
 
 export default function ShowCreateAsset() {
   const navigate = useNavigate();
@@ -30,11 +32,7 @@ export default function ShowCreateAsset() {
   });
   const getUser = async () => {
     try {
-      const resp = await axios.get("http://localhost:8000/api/user/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resp = await getUserInfoApi(token);
       setUserInfo(resp.data.user);
     } catch (err) {
       console.log(err);
@@ -77,11 +75,7 @@ export default function ShowCreateAsset() {
       files.forEach((file) => {
         body.append("images", file);
       });
-      const resp = await axios.post("http://localhost:8000/api/asset/", body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resp = await createAssetApi(token, body);
       console.log(resp.data);
       setMessage(resp.data.msg);
       document.getElementById("message_modal").showModal();

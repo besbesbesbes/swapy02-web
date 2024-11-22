@@ -15,6 +15,7 @@ import useUserStore from "../store/user-store";
 import axios from "axios";
 import ShowMessage from "./ShowMessage";
 import useOtherStore from "../store/other-store";
+import { getPreFill } from "../apis/search-api";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +31,7 @@ const Header = () => {
   const [assets, setAssets] = useState([]);
   const getAssets = async () => {
     try {
-      const resp = await axios.get("http://localhost:8000/api/search?p=0");
+      const resp = await getPreFill();
       setAssets(resp.data.assets);
     } catch (err) {
       console.log(err);

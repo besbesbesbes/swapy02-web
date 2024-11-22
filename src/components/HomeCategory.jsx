@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import "animate.css";
 const HomeCategory = () => {
   const navigate = useNavigate();
   const dhlLink = (val) => {
@@ -9,7 +9,7 @@ const HomeCategory = () => {
   return (
     <div className="themeLight text-xs font-bold text-my-text">
       {/* category area */}
-      <div className="w-full bg-category-pattern bg-my-acct min-h-[80px] flex items-center justify-evenly flex-wrap">
+      <div className="w-full bg-category-pattern bg-my-acct min-h-[80px] flex items-center justify-evenly flex-wrap animate__animated animate__zoomIn">
         {/* list of category */}
         <div
           className="flex flex-col items-center cursor-pointer"

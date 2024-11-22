@@ -6,6 +6,7 @@ import axios from "axios";
 import ShowMessage from "./ShowMessage";
 import ShowChangePassword from "./ShowChangePassword";
 import ShowChangeProfile from "./ShowChangeProfile";
+import { getUserInfoApi, updateUserInfoApi } from "../apis/user-api";
 
 const UserInfoProfile = () => {
   const user = useUserStore((state) => state.user);
@@ -25,11 +26,7 @@ const UserInfoProfile = () => {
   };
   const getUserInfo = async () => {
     try {
-      const resp = await axios.get("http://localhost:8000/api/user/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resp = await getUserInfoApi(token);
       setUserInfo(resp.data.user);
       setUser({ ...user, userIsReady: resp.data.user.userIsReady });
     } catch (err) {
@@ -43,15 +40,7 @@ const UserInfoProfile = () => {
   const updateUserInfo = async (e) => {
     e.preventDefault();
     try {
-      const resp = await axios.patch(
-        "http://localhost:8000/api/user/update-user",
-        input,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const resp = await updateUserInfoApi(token, input);
       setUserInfo(resp.data.user);
       setMessage(resp.data.msg);
       document.getElementById("message_modal").showModal();

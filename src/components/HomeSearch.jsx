@@ -5,6 +5,13 @@ import axios from "axios";
 import { IoHomeSharp } from "react-icons/io5";
 import useAssetStore from "../store/asset-store";
 import { FaAngleDoubleDown, FaSearchMinus } from "react-icons/fa";
+import "animate.css";
+import {
+  getAllAssetsCatApi,
+  // getAllAssetsCatMoreApi,
+  getAllAssetsValApi,
+  // getAllAssetsValMoreApi,
+} from "../apis/search-api";
 
 export default function HomeSearch() {
   const setCurrentAsset = useAssetStore((state) => state.setCurrentAsset);
@@ -20,20 +27,10 @@ export default function HomeSearch() {
     let result;
     // console.log(page);
     searchParams.get("c")
-      ? (result = await axios.get(
-          "http://localhost:8000/api/search?c=" +
-            searchParams.get("c") +
-            "&p=" +
-            page
-        ))
+      ? (result = await getAllAssetsCatApi(page, searchParams.get("c")))
       : null;
     searchParams.get("v")
-      ? (result = await axios.get(
-          "http://localhost:8000/api/search?v=" +
-            searchParams.get("v") +
-            "&p=" +
-            page
-        ))
+      ? (result = await getAllAssetsValApi(page, searchParams.get("v")))
       : null;
     setAssets(result.data.assets);
     setTotalPage(Math.ceil(result.data.totalAssetsCount / 24));
@@ -56,25 +53,15 @@ export default function HomeSearch() {
   };
   const hdlLoadMore = async () => {
     try {
-      setPage(page + 1);
       let result;
-      searchParams.get("c")
-        ? (result = await axios.get(
-            "http://localhost:8000/api/search?c=" +
-              searchParams.get("c") +
-              "&p=" +
-              (page + 1)
-          ))
-        : null;
-      searchParams.get("v")
-        ? (result = await axios.get(
-            "http://localhost:8000/api/search?v=" +
-              searchParams.get("v") +
-              "&p=" +
-              (page + 1)
-          ))
-        : null;
-      setAssets((prv) => [...prv, ...result.data.assets]);
+      if (searchParams.get("c")) {
+        result = await getAllAssetsCatApi(page + 1, searchParams.get("c"));
+        setAssets((prv) => [...prv, ...result.data.assets]);
+      }
+      if (searchParams.get("v")) {
+        result = await getAllAssetsValApi(page + 1, searchParams.get("v"));
+        setAssets((prv) => [...prv, ...result.data.assets]);
+      }
     } catch (err) {
       console.log(err.message);
     }
@@ -82,7 +69,7 @@ export default function HomeSearch() {
   return (
     <div>
       {/* header */}
-      {/* <button onClick={() => console.log(cat)}>Test</button> */}
+      {/* <button onClick={() => console.log(assets)}>Test</button> */}
       <div className="flex text-xl w-full bg-my-bg-card px-5 py-1 ">
         {/* <button onClick={() => console.log(page)}>Test</button> */}
         <Link to="/">
@@ -103,23 +90,23 @@ export default function HomeSearch() {
       </div>
       <div className="bg-my-bg-card pb-5">
         {/* <div className="w-full min-h-[500px] bg-my-bg-main flex justify-evenly items-start p-4 flex-wrap gap-4"> */}
+        {assets.length == 0 && (
+          <div className="pt-[100px] flex flex-col items-center gap-2">
+            <FaSearchMinus className="text-my-acct text-[100px]" />
+            <p className="text-2xl text-my-acct font-bold">
+              No assets were found
+            </p>
+            <p className="text-2xl text-my-acct font-bold">
+              based on your search criteria.
+            </p>
+          </div>
+        )}
         <div className="w-full min-h-[500px] bg-my-bg-main grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4">
-          {assets.length == 0 && (
-            <div className="mt-[100px] flex flex-col items-center gap-2">
-              <FaSearchMinus className="text-my-acct text-[100px]" />
-              <p className="text-2xl text-my-acct font-bold">
-                No assets were found
-              </p>
-              <p className="text-2xl text-my-acct font-bold">
-                based on your search criteria.
-              </p>
-            </div>
-          )}
           {assets.map((el, idx) => {
             return (
               <div
                 key={idx}
-                className="bg-my-bg-card w-[170px] h-[230px] shadow-md flex flex-col items-center gap-2 overflow-hidden p-2 hover:bg-my-hover  cursor-pointer relative"
+                className="bg-my-bg-card w-[170px] h-[230px] shadow-md flex flex-col items-center gap-2 overflow-hidden p-2 hover:bg-my-hover  cursor-pointer relative animate__animated animate__zoomIn"
                 onClick={(e) => {
                   hdlShowAssets(el);
                 }}

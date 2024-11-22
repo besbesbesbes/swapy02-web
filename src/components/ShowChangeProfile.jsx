@@ -6,6 +6,7 @@ import useOtherStore from "../store/other-store";
 import axios from "axios";
 import ShowMessage from "./ShowMessage";
 import { useNavigate } from "react-router-dom";
+import { changeProfilePicApi } from "../apis/user-api.jsx";
 
 export default function ShowChangeProfile() {
   const navigate = useNavigate();
@@ -38,13 +39,7 @@ export default function ShowChangeProfile() {
         }, 1000);
         return;
       }
-      const resp = await axios.post(
-        "http://localhost:8000/api/user/change-profilepic",
-        body,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const resp = await changeProfilePicApi(token, body);
       setMessage(resp.data.msg);
       document.getElementById("message_modal").showModal();
       setTimeout(() => {

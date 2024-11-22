@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { IoTrashBin } from "react-icons/io5";
 import { FaImage } from "react-icons/fa";
 import useAssetStore from "../store/asset-store";
+import { getUserInfoApi } from "../apis/user-api.jsx";
+import { getAssetByIdApi } from "../apis/search-api.jsx";
 
 export default function ShowEditAsset() {
   const navigate = useNavigate();
@@ -34,11 +36,7 @@ export default function ShowEditAsset() {
   const [picToDelete, setPicToDelete] = useState([]);
   const getUser = async () => {
     try {
-      const resp = await axios.get("http://localhost:8000/api/user/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const resp = await getUserInfoApi(token);
       setUserInfo(resp.data.user);
     } catch (err) {
       console.log(err);
@@ -46,9 +44,7 @@ export default function ShowEditAsset() {
   };
   const getAsset = async () => {
     try {
-      const resp = await axios.get(
-        "http://localhost:8000/api/search/all?a=" + currentAsset
-      );
+      const resp = await getAssetByIdApi(currentAsset);
       setAsset(resp.data.assets[0]);
       // console.log(resp.data);
       setInput({
@@ -163,11 +159,11 @@ export default function ShowEditAsset() {
   return (
     <div className="w-8/12 min-h-[400px] bg-my-bg-card fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col p-10">
       {/* Edit Asset */}
-      <div className="flex">
+      {/* <div className="flex">
         <button onClick={() => console.log(asset)}>Asset</button>
         <button onClick={() => console.log(files)}>files</button>
         <button onClick={() => console.log(picToDelete)}>picToDelete</button>
-      </div>
+      </div> */}
 
       <div>
         <div className="w-full h-[500px] flex gap-2">
