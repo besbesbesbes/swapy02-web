@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        "header-pattern": "url('/src/pics/main-pattern.png')",
-        "category-pattern": "url('/src/pics/main-pattern.png')",
+        "header-pattern": "url('/pics/main-pattern.png')",
+        "category-pattern": "url('/pics/main-pattern.png')",
       },
       colors: {
         "my-acct": "#f97316",

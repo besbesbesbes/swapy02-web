@@ -9,7 +9,7 @@ export default function ShowContactUs() {
       }}
     >
       {/* qr */}
-      <img src="./src/pics/contact-us-qr.png" alt="no load" />
+      <img src="./pics/contact-us-qr.png" alt="no load" />
       {/* link */}
       <a
         href="https://linktr.ee/besbesbes"
