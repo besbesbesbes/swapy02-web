@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "animate.css";
+
 const HomeCategory = () => {
   const navigate = useNavigate();
   const dhlLink = (val) => {
@@ -15,11 +16,7 @@ const HomeCategory = () => {
           className="flex flex-col items-center cursor-pointer"
           onClick={() => dhlLink("SMARTPHONE")}
         >
-          <img
-            src="/src/pics/icon-smartphone.png"
-            alt="no load"
-            width={"45px"}
-          />
+          <img src="/pics/icon-smartphone.png" alt="no load" width={"45px"} />
           <p className="w-[86px] text-center">Smartphone</p>
         </div>
         <div
